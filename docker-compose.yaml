@@ -5,9 +5,23 @@ services:
     build: frontend
     ports:
       - "3000:3000"
+    develop:
+      watch:
+        - path: ./frontend
+          target: /app
+          action: sync+restart
+        - path: ./frontend/Dockerfile.dev
+          action: rebuild
 
   backend:
     container_name: fastapi
-    build: backend
+    build: ./backend
     ports:
       - "8000:8000"
+    develop:
+      watch:
+        - path: ./backend
+          target: /code
+          action: sync+restart
+        - path: ./backend/Dockerfile
+          action: rebuild
