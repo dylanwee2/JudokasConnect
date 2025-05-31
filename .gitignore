@@ -11,7 +11,4 @@
 # Built Visual Studio Code Extensions
 *.vsix
 
-# Node.js dependencies
-frontend/node_modules/
-
 .DS_Store

@@ -10,4 +10,4 @@ services:
     container_name: fastapi
     build: backend
     ports:
-      - "80:80"
+      - "8000:8000"
