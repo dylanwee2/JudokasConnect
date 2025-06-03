@@ -1,6 +1,6 @@
 To Start Project
 ```shell
-docker compose up -d 
+docker compose up -d --watch
 ```
 
 To Build Project
