@@ -8,14 +8,13 @@ const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
 };
 
-export default function Home() {
-
-
+function Home() {
   return (
-    <div className={styles.container}>
-      <h1 className="text-3xl font-bold underline">
-      Hello world!
-      </h1>
-    </div>
+    <main className={styles.main}>
+      <h1 className={styles.title}>Welcome to index</h1>
+    </main>
+  
   );
 }
+
+export default Home;
