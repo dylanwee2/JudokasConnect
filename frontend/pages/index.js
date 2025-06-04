@@ -1,19 +1,21 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { useEffect } from "react";
+
+const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+};
 
 export default function Home() {
+
+
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js</a> on 123!
-        </h1>
-      </main>
+      <h1 className="text-3xl font-bold underline">
+      Hello world!
+      </h1>
     </div>
   );
 }

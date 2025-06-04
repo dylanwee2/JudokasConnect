@@ -5,8 +5,13 @@
     "build": "next build"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.8",
+    "firebase": "^10.14.1",
+    "firebaseui": "^6.1.0",
     "next": "latest",
+    "postcss": "^8.5.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^4.1.8"
   }
 }
