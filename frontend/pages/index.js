@@ -21,19 +21,37 @@ function Home() {
           <h1 className="text-white text-base sm:text-6xl md:text-6xl lg:text-8xl xl:text-8xl font-sans ">Connecting</h1>
           <h1 className="text-white text-base sm:text-6xl md:text-6xl lg:text-8xl xl:text-8xl font-sans ">Judokas</h1>
         </div>
-        <button className="
-        sm:h-10 sm:w-32
-        md:h-10 md:w-32
-        lg:h-12 lg:w-40
-        xl:h-12 xl:w-40 
-        
-        bg-orange-400 rounded-xl ml-20 mt-5 flex items-center justify-center
-        text-black font-semibold
-        hover:text-white hover:bg-orange-500
-        text-center sm:text-lg md:text-lg lg:text-2xl xl:text-2xl">JOIN NOW
-        </button>
 
-        <div className="flex justify-left gap-4 mt-45 ml-20">
+        <div class="flex block">
+          <button className="
+          sm:h-10 sm:w-32
+          md:h-10 md:w-32
+          lg:h-12 lg:w-40
+          xl:h-12 xl:w-40 
+          
+          bg-orange-400 rounded-xl ml-20 mt-5 flex items-center justify-center
+          text-black font-semibold
+          hover:text-white hover:bg-orange-500
+          text-center sm:text-lg md:text-lg lg:text-2xl xl:text-2xl">
+          <a href='/signup'>Sign up</a>
+          </button>
+
+          <button className="
+          sm:h-10 sm:w-32
+          md:h-10 md:w-32
+          lg:h-12 lg:w-40
+          xl:h-12 xl:w-40 
+          
+          bg-orange-400 rounded-xl ml-5 mt-5 flex items-center justify-center
+          text-black font-semibold
+          hover:text-white hover:bg-orange-500
+          text-center sm:text-lg md:text-lg lg:text-2xl xl:text-2xl">
+          <a href='/login'>Login</a>
+          </button>
+        </div>
+        
+
+        <div className="flex justify-left gap-4 mt-50 ml-20">
           <button className="bg-white shadow rounded-full 
           sm:h-10 sm:w-10
           md:h-12 md:w-12
