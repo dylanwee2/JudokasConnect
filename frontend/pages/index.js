@@ -15,7 +15,7 @@ function Home() {
       {/* <h1 className={styles.title}>Welcome to index</h1> */}
       <div
         className="relative w-full h-160 bg-cover bg-auto bg-center"
-        style={{ backgroundImage: "url('/homepage_bg.jpg')" }}
+        style={{ backgroundImage: "url('/homepage_bg_2.jpg')" }}
       >
         <div className="pl-20 pt-20">
           <h1 className="text-white text-base sm:text-6xl md:text-6xl lg:text-8xl xl:text-8xl font-sans ">Connecting</h1>
