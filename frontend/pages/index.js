@@ -1,15 +1,8 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
-import { useEffect } from "react";
-
-
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
-};
 
 function Home() {
+  // Set an initializing state whilst Firebase connects
   return (
     <main className={styles.main}>
       {/* <h1 className={styles.title}>Welcome to index</h1> */}
@@ -22,7 +15,7 @@ function Home() {
           <h1 className="text-white text-base sm:text-6xl md:text-6xl lg:text-8xl xl:text-8xl font-sans ">Judokas</h1>
         </div>
 
-        <div class="flex block">
+        <div className="flex block">
           <button className="
           sm:h-10 sm:w-32
           md:h-10 md:w-32

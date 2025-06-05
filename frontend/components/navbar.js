@@ -1,4 +1,26 @@
+import { useEffect,useState } from "react";
+import { auth } from "../pages/firebase";
+import { signOut } from "firebase/auth";
+import { useAuthState } from 'react-firebase-hooks/auth';
+
 export default function Navbar() {
+  const [user, loading] = useAuthState(auth);
+  
+  useEffect(() => {
+    if (loading) return; // wait until loading is done
+
+    if (!user) {
+      console.log("User is not logged in");
+    } else {
+      console.log("User:", user);
+    }
+  }, [user, loading]);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    alert("Log out successful!");
+  };
+
   return (
     <nav className="bg-white shadow">
       <div className="container lg mx-8">
@@ -14,9 +36,25 @@ export default function Navbar() {
               <a href="#" className="text-gray-600 hover:text-blue-600">Contact</a>
             </div>
           </div>
-
+        
           <div className="flex items-center space-x-4">
-            <a href="#"><img src="/profile.svg" className="h-8 w-8 rounded-full" /></a>
+            {user ? (
+              <>
+                <span className="text-gray-800 font-medium">
+                  Welcome back, {user.displayName || user.email.split('@')[0]}!
+                </span>
+                <button
+                  onClick={handleLogout}
+                  className="bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <a href="/login">
+                <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
+              </a>
+            )}
           </div>
 
         </div>

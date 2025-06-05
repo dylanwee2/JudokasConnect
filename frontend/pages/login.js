@@ -1,13 +1,34 @@
 import Head from "next/head";
+import { useState } from 'react';
 import styles from "../styles/Home.module.css";
+import { auth } from "./firebase";
+import { useRouter } from "next/navigation";
+import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+
 
 function Login() {
+  const router = useRouter();
+
+  const [signinWithEmailAndPassword, error] = useSignInWithEmailAndPassword(auth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");  
+
+  const onSubmit = async () => {
+    await signinWithEmailAndPassword(email, password);
+    if (error) {
+      alert("Login failed: " + error.message);
+    } else {
+      alert("Login successful!");
+      router.push("/"); // Redirect to login page after successful signup
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
         <title>Login Now!</title>
       </Head>
-
+      
       <div className="relative h-[800px] overflow-hidden">
       {/* Background image layer */}
       <div
@@ -45,19 +66,25 @@ function Login() {
             <div className="flex flex-col items-center w-full">
               <input
                 type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 placeholder="johndoe@gmail.com"
                 className="border border-gray-500 rounded-md p-2 mt-5 w-80"
               />
               <input
                 type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 placeholder="**********"
                 className="border border-gray-500 rounded-md p-2 mt-5 w-80"
               />
-              <input
-                type="submit"
-                value="Login"
-                className="bg-black text-white rounded-md p-2 mt-5 w-80 cursor-pointer"
-              />
+
+              <button
+                onClick={onSubmit}
+                className="bg-black text-white rounded-md p-2 mt-5 w-80"
+              >
+                Sign Up
+              </button>
             </div>
           </div>
 

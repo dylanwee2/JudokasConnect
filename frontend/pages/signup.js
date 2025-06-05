@@ -1,7 +1,27 @@
+import { useState } from 'react';
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
+import { auth } from "./firebase";
+import { useRouter } from "next/navigation";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 
 function Signup() {
+  const router = useRouter();
+
+  const [createUserWithEmailAndPassword, error] = useCreateUserWithEmailAndPassword(auth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");  
+
+  const onSubmit = async () => {
+    await createUserWithEmailAndPassword(email, password);
+    if (error) {
+      alert("Signup failed: " + error.message);
+    } else {
+      alert("Signup successful!");
+      router.push("/login"); // Redirect to login page after successful signup
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -45,24 +65,25 @@ function Signup() {
             <div className="flex flex-col items-center w-full">
               <input
                 type="text"
-                placeholder="Name"
-                className="border border-gray-500 rounded-md p-2 mt-5 w-80"
-              />
-              <input
-                type="text"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 placeholder="johndoe@gmail.com"
                 className="border border-gray-500 rounded-md p-2 mt-5 w-80"
               />
               <input
                 type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 placeholder="**********"
                 className="border border-gray-500 rounded-md p-2 mt-5 w-80"
               />
-              <input
-                type="submit"
-                value="Sign Up"
-                className="bg-black text-white rounded-md p-2 mt-5 w-80 cursor-pointer"
-              />
+
+              <button
+                onClick={onSubmit}
+                className="bg-black text-white rounded-md p-2 mt-5 w-80"
+              >
+                Sign Up
+              </button>
             </div>
           </div>
 
