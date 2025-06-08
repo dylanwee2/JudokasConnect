@@ -9,16 +9,37 @@ function Signup() {
   const router = useRouter();
 
   const [createUserWithEmailAndPassword, error] = useCreateUserWithEmailAndPassword(auth);
+  const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");  
 
   const onSubmit = async () => {
-    await createUserWithEmailAndPassword(email, password);
-    if (error) {
-      alert("Signup failed: " + error.message);
-    } else {
-      alert("Signup successful!");
-      router.push("/login"); // Redirect to login page after successful signup
+    try {
+      const userCredential = await createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      const user_data = auth.currentUser;
+
+      const token = await user.getIdToken();
+
+      // Replace with your actual FastAPI backend URL
+      await fetch("http://localhost:8000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: user.email,
+          name: username,  
+        }),
+      });
+
+      alert("Sign up successful!");
+      router.push("/");
+    } 
+    catch (error) {
+      console.error("Signup error:", error);
+      alert("Sign up failed!");
     }
   }
 
@@ -63,6 +84,13 @@ function Signup() {
 
           <div className="flex justify-center">
             <div className="flex flex-col items-center w-full">
+              <input
+                type="text"
+                onChange={(e) => setName(e.target.value)}
+                value={username}
+                placeholder="johndoe"
+                className="border border-gray-500 rounded-md p-2 mt-5 w-80"
+              />
               <input
                 type="text"
                 onChange={(e) => setEmail(e.target.value)}

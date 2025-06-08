@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white shadow">
-      <div className="container lg mx-8">
+      <div className="mx-20">
         <div className="flex justify-between h-16 items-center">
 
           <div className="flex items-center space-x-8">
@@ -38,7 +38,10 @@ export default function Navbar() {
           </div>
         
           <div className="flex items-center space-x-4">
-            {user ? (
+            <a href="/profile">
+                <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
+            </a>
+            {user && (
               <>
                 <span className="text-gray-800 font-medium">
                   Welcome back, {user.displayName || user.email.split('@')[0]}!
@@ -50,10 +53,6 @@ export default function Navbar() {
                   Logout
                 </button>
               </>
-            ) : (
-              <a href="/login">
-                <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
-              </a>
             )}
           </div>
 
