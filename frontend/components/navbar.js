@@ -31,7 +31,7 @@ export default function Navbar() {
             <a href="/" className="text-xl font-bold text-gray-800">JudokasConnect</a>
             <div className="hidden md:flex space-x-6">
               <a href="/" className="text-gray-600 hover:text-blue-600">Home</a>
-              <a href="/" className="text-gray-600 hover:text-blue-600">Training Sessions</a>
+              <a href="/events" className="text-gray-600 hover:text-blue-600">Training Sessions</a>
               <a href="#" className="text-gray-600 hover:text-blue-600">About</a>
               <a href="#" className="text-gray-600 hover:text-blue-600">Contact</a>
             </div>
