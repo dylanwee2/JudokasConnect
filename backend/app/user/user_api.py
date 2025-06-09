@@ -11,7 +11,7 @@ user_router = APIRouter(
     tags=["users"],
 )
 
-@user_router.get("{uid}")
+@user_router.get("/{uid}")
 def get_user(uid: str):
     user_data = user.get_user(uid)
     return user_data

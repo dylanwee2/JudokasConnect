@@ -34,3 +34,28 @@ export const authFetch = {
   put: (endpoint, body) => request("PUT", endpoint, body),
   delete: (endpoint) => request("DELETE", endpoint),
 };
+
+
+async function publicRequest(method, endpoint, body = null) {
+  const res = await fetch(`${BASE_URL}${endpoint}`, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : null,
+  });
+
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(`API Error: ${res.status} - ${error}`);
+  }
+
+  return res.json();
+}
+
+export const publicFetch = {
+  get: (endpoint) => publicRequest("GET", endpoint),
+  post: (endpoint, body) => publicRequest("POST", endpoint, body),
+  put: (endpoint, body) => publicRequest("PUT", endpoint, body),
+  delete: (endpoint) => publicRequest("DELETE", endpoint),
+};

@@ -5,6 +5,7 @@ import { auth } from "./firebase";
 import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from "next/navigation";
+import { authFetch } from '../utils/apis';
 
 
 
@@ -17,13 +18,25 @@ function Profile() {
         if (loading) return; // wait until loading is done
 
         if (!user) {
-        console.log("User is not logged in");
-        alert("You are not logged in. Please log in to access your profile.");
-        router.push('/login'); // Redirect to login page
+          console.log("User is not logged in");
+          alert("You are not logged in. Please log in to access your profile.");
+          router.push('/login');
         } 
         else {
-          
-        }}, [loading, user, router]);
+          const fetchProfile = async () => {
+            try {
+              const data = await authFetch.get(`/api/users/${user.uid}`); // Assuming backend has this endpoint
+              setProfile(data);
+            } 
+            catch (err) {
+              console.error("Error fetching profile:", err.message);
+              alert("Failed to load profile data.");
+            }
+          };
+
+          fetchProfile();
+        }
+      }, [loading, user, router]);
 
     const handleLogout = async () => {
         await signOut(auth);

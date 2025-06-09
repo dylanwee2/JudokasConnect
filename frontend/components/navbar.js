@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect } from "react";
 import { auth } from "../pages/firebase";
 import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';

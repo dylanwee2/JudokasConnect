@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.user.user_api import user_router
+from app.event.event_api import event_router
 
 app = FastAPI()
 
@@ -15,3 +16,4 @@ app.add_middleware(
 )
 
 app.include_router(user_router)
+app.include_router(event_router)
