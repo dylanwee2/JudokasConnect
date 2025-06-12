@@ -7,21 +7,11 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, eventI
   const [user, loading] = useAuthState(auth);
   const [userId, setUserId] = useState(null);
 
-  useEffect(() => {
-    if (loading) return;
-    if (!user) {
-      console.log("User is not logged in");
-    } else {
-      setUserId(user.uid);
-    }
-  }, [user, loading]);
-
   const handleSubmit = () => {
     if (!status) return alert("Please select your attendance status.");
 
     const pollResponse = {
       userId,
-      eventId,
       status,
     };
 
@@ -29,8 +19,18 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, eventI
     setStatus(null);
     onClose();
   };
+    useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      console.log("User is not logged in");
+    } 
+    else {
+      setUserId(user.uid);
+    }
+  }, [user, loading]);
 
   if (!isOpen) return null;
+
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">

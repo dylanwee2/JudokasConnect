@@ -13,18 +13,25 @@ import { auth } from "../pages/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
  
 export default function EventsPage() {
+  // Init Calendar 
   const calendarRef = useRef(null);
+
+  // Load User Account Details
+  const [user, loading] = useAuthState(auth);
+
+  // Set Event function
   const [events, setEvents] = useState([]);
+
+  // Set Current User ID Function
+  const [currentUserId, setUserId] = useState(null);
+
+  // Open modals
   const [addEventsModal, setAddEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [editEventsModal, setEditEventsModal] = useState(false); 
-  const [user, loading] = useAuthState(auth);
-  const [currentUserId, setUserId] = useState(null);
   const [attendanceModalOpen, setOpenAttendanceModal] = useState(false);
 
-  const attendees = ["Alice", "Bob", "Charlie"];
-  const nonAttendees = ["David", "Eva"];
-
+  // Load Events 
   const loadEvents = async () => {
       try {
         const response = await publicFetch.get(`/api/events`);
@@ -55,10 +62,10 @@ export default function EventsPage() {
       }
     };
 
-  // 2️⃣ Add new event
+  // Add new event
   const handleAddEvent = async (newEvent) => {
     try {
-        const response = await publicFetch.post(`/api/events`, newEvent);
+        const response = await publicFetch.post(`/api/events/add_event`, newEvent);
         const api = calendarRef.current?.getApi();
         api.addEvent(response);
     } 
@@ -71,7 +78,7 @@ export default function EventsPage() {
   // Update Event 
   const handleSave = async () => {
     try {
-      await publicFetch.put(`/api/events/${selectedEvent.id}`, selectedEvent);
+      await publicFetch.put(`/api/events/update_event/${selectedEvent.id}`, selectedEvent);
       
       // Optionally update event in your calendar UI (e.g. FullCalendar)
       const calendarApi = calendarRef.current.getApi();
@@ -91,6 +98,68 @@ export default function EventsPage() {
       console.error("Error saving event:", err.message);
       alert("Failed to update event.");
     }
+  };
+
+  // Update attendance
+  const updateAttendance = async (pollResponse) => {
+      const eventId = selectedEvent.id;
+
+      try {
+        const response = await publicFetch.get(`/api/events/get_event_attendance/${eventId}`);
+        console.log("Before: ", response);
+
+        // Get current lists
+        let newAttendingList = [...(response.attendingList || [])];
+        let newNotAttendingList = [...(response.NotAttendingList || [])];
+
+        // Remove userId from both lists to avoid duplicates
+        newAttendingList = newAttendingList.filter(id => id !== pollResponse.userId);
+        newNotAttendingList = newNotAttendingList.filter(id => id !== pollResponse.userId);
+
+        if(pollResponse.status == "attending"){
+          newAttendingList.push(pollResponse.userId);
+        }
+        else{
+          newNotAttendingList.push(pollResponse.userId);
+        }
+        response.attendingList = newAttendingList;
+        response.NotAttendingList = newNotAttendingList;
+        console.log("After: ", response);
+        
+        try {
+          await publicFetch.put(`/api/events/update_event_attendance/${selectedEvent.id}`, response);
+        } 
+        catch (error) {
+          console.error("Error updating attendance:", error.message);
+          alert("Failed to update attendance.");
+        }
+      } 
+      catch (error) {
+          const attendanceData = {
+          id: selectedEvent.id,
+          title: selectedEvent.title,
+          start: selectedEvent.start,
+          allDay: selectedEvent.allDay,
+          end: selectedEvent.end,
+          attendingList: [],
+          NotAttendingList: []
+        };
+
+        if(pollResponse.status == "attending"){
+          attendanceData.attendingList.push(pollResponse.userId);
+        }
+        else{
+          attendanceData.NotAttendingList.push(pollResponse.userId);
+        }
+
+        try {
+          const response = await publicFetch.post(`/api/events/add_event_attendance`, attendanceData);
+        } 
+        catch (error) {
+          console.error("Error adding attendance:", error.message);
+          alert("Failed to add attendance.");
+        }
+      }
   };
 
   // 1️⃣ Load events from FastAPI
@@ -128,12 +197,13 @@ export default function EventsPage() {
           const uid = info.event.id;
           const fetchProfile = async () => {
             try {
-              const response = await publicFetch.get(`/api/events/${uid}`);
+              const response = await publicFetch.get(`/api/events/get_event/${uid}`);
               const eventData = response;
 
               const eventUserId = eventData.userId;
 
               if (currentUserId !== eventUserId) {
+                setSelectedEvent(eventData);
                 setOpenAttendanceModal(true);
               }
               else{
@@ -172,8 +242,8 @@ export default function EventsPage() {
       <EventAttendanceModal
         isOpen={attendanceModalOpen}
         onClose={() => setOpenAttendanceModal(false)}
-        attendees={attendees}
-        nonAttendees={nonAttendees}
+        event={selectedEvent}
+        onSubmit={updateAttendance}
       />
     </div>    
   );

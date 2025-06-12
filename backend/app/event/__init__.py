@@ -8,3 +8,12 @@ class BaseEvent(BaseModel):
     end: str = None  # optional
     userId: str  # Created by User
     allDay: bool
+
+class EventAttendance(BaseModel):
+    id: str
+    title: str
+    start: str
+    end: str = None  # optional
+    attendingList: list[str]
+    NotAttendingList: list[str]
+    allDay: bool
