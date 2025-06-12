@@ -7,6 +7,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import { publicFetch } from '../utils/apis';
 import EventModal from '../components/addEventModal';
 import EditEventModal from '../components/editEventModal';
+import EventAttendanceModal from '../components/eventAttendance';
 
 import { auth } from "../pages/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -14,11 +15,15 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 export default function EventsPage() {
   const calendarRef = useRef(null);
   const [events, setEvents] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [addEventsModal, setAddEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [showModal, setShowModal] = useState(false); 
+  const [editEventsModal, setEditEventsModal] = useState(false); 
   const [user, loading] = useAuthState(auth);
   const [currentUserId, setUserId] = useState(null);
+  const [attendanceModalOpen, setOpenAttendanceModal] = useState(false);
+
+  const attendees = ["Alice", "Bob", "Charlie"];
+  const nonAttendees = ["David", "Eva"];
 
   const loadEvents = async () => {
       try {
@@ -77,7 +82,7 @@ export default function EventsPage() {
         existingEvent.setEnd(selectedEvent.end);
       }
 
-      setShowModal(false);
+      setEditEventsModal(false);
 
       // Update UI
       loadEvents();
@@ -116,7 +121,7 @@ export default function EventsPage() {
         customButtons={{
           addEventButton: {
             text: 'Add Event',
-            click: () => setModalOpen(true),
+            click: () => setAddEventModal(true),
           },
         }}
         eventClick= {function(info) {
@@ -127,17 +132,14 @@ export default function EventsPage() {
               const eventData = response;
 
               const eventUserId = eventData.userId;
-              console.log("User ID:", eventUserId);
-              console.log("User ID:", currentUserId);
 
               if (currentUserId !== eventUserId) {
-                alert("You can only edit your own events.");
-                return;
+                setOpenAttendanceModal(true);
               }
               else{
                 // Open modal with event data
                 setSelectedEvent(eventData);
-                setShowModal(true);
+                setEditEventsModal(true);
               }
             } 
             catch (err) {
@@ -154,17 +156,24 @@ export default function EventsPage() {
       />
 
       <EventModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
+        isOpen={addEventsModal}
+        onClose={() => setAddEventModal(false)}
         onSubmit={handleAddEvent}
       />
 
       <EditEventModal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        isOpen={editEventsModal}
+        onClose={() => setEditEventsModal(false)}
         event={selectedEvent}
         setEvent={setSelectedEvent}
         onSave={handleSave}
+      />
+
+      <EventAttendanceModal
+        isOpen={attendanceModalOpen}
+        onClose={() => setOpenAttendanceModal(false)}
+        attendees={attendees}
+        nonAttendees={nonAttendees}
       />
     </div>    
   );
