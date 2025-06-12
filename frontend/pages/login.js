@@ -83,7 +83,7 @@ function Login() {
                 onClick={onSubmit}
                 className="bg-black text-white rounded-md p-2 mt-5 w-80"
               >
-                Sign Up
+                Login
               </button>
             </div>
           </div>
