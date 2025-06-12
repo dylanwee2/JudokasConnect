@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { auth } from "../pages/firebase";
 import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const [user, loading] = useAuthState(auth);
   
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     await signOut(auth);
     alert("Log out successful!");
+    router.push('/login');
   };
 
   return (
