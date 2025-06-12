@@ -17,8 +17,8 @@ function Login() {
     await signinWithEmailAndPassword(email, password);
     if (error) {
       alert("Login failed: " + error.message);
-    } else {
-      alert("Login successful!");
+    } 
+    else {
       router.push("/"); // Redirect to login page after successful signup
     }
   }

@@ -20,7 +20,6 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     await signOut(auth);
-    alert("Log out successful!");
     router.push('/login');
   };
 

@@ -11,6 +11,7 @@ import EventAttendanceModal from '../components/eventAttendance';
 
 import { auth } from "../pages/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useRouter } from "next/navigation";
  
 export default function EventsPage() {
   // Init Calendar 
@@ -30,6 +31,8 @@ export default function EventsPage() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [editEventsModal, setEditEventsModal] = useState(false); 
   const [attendanceModalOpen, setOpenAttendanceModal] = useState(false);
+
+  const router = useRouter();
 
   // Load Events 
   const loadEvents = async () => {
@@ -168,11 +171,13 @@ export default function EventsPage() {
 
     if (!user) {
       console.log("User is not logged in");
+      alert("Please login to view training sessions");
+      router.push('/');
     } else {
       console.log("User:", user);
       setUserId(user.uid);
+      loadEvents();
     }
-    loadEvents();
   }, [user, loading]);
 
   return (
