@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import { auth } from "../pages/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { publicFetch } from '../utils/apis';
 
-export default function EventAttendanceModal({ isOpen, onClose, onSubmit, eventId }) {
+export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event }) {
   const [status, setStatus] = useState(null); // "attending" or "not_attending"
   const [user, loading] = useAuthState(auth);
   const [userId, setUserId] = useState(null);
 
-  const handleSubmit = () => {
+  // Attending list data setters
+  const [attendingList, setAttendingList] = useState([]);
+  const [notAttendingList, setNotAttendingList] = useState([]);
+
+
+  const handleSubmit = async () => {
     if (!status) return alert("Please select your attendance status.");
 
     const pollResponse = {
@@ -19,17 +25,43 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, eventI
     setStatus(null);
     onClose();
   };
-    useEffect(() => {
+
+  const get_event_data = async () => {
+    const eventId = event.id;
+
+    try {
+      const response = await publicFetch.get(`/api/events/get_event_attendance/${eventId}`);
+
+      // Get current lists
+      let attendingList = [...(response.attendingList || [])];
+      let notAttendingList = [...(response.NotAttendingList || [])];  
+
+      setAttendingList(attendingList);
+      setNotAttendingList(notAttendingList);
+    } 
+    catch (error) {
+      console.error("Error getting event data:", error.message);
+      alert("Failed to get event data.");
+    }
+  }
+
+  useEffect(() => {
     if (loading) return;
     if (!user) {
       console.log("User is not logged in");
     } 
     else {
       setUserId(user.uid);
+      
     }
-  }, [user, loading]);
+  }, [user, loading, isOpen, event]);
 
-  if (!isOpen) return null;
+  if(!isOpen){
+    return null
+  }
+  else{
+    get_event_data();
+  };
 
 
   return (
@@ -37,6 +69,35 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, eventI
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
         <h2 className="text-xl font-semibold mb-4">Are you attending?</h2>
 
+        {/* Attending List */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-green-700 mb-1">✅ Attending:</h3>
+          {attendingList.length > 0 ? (
+            <ul className="list-disc list-inside text-sm text-gray-800">
+              {attendingList.map((id) => (
+                <li key={id}>{id}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-gray-500">No one is attending yet.</p>
+          )}
+        </div>
+
+        {/* Not Attending List */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-red-700 mb-1">❌ Not Attending:</h3>
+          {notAttendingList.length > 0 ? (
+            <ul className="list-disc list-inside text-sm text-gray-800">
+              {notAttendingList.map((id) => (
+                <li key={id}>{id}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-gray-500">No one has declined yet.</p>
+          )}
+        </div>
+
+        {/* Buttons */}
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setStatus("attending")}
