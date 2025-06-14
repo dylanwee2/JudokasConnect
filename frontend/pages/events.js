@@ -116,14 +116,14 @@ export default function EventsPage() {
         let newNotAttendingList = [...(response.NotAttendingList || [])];
 
         // Remove userId from both lists to avoid duplicates
-        newAttendingList = newAttendingList.filter(id => id !== pollResponse.userId);
-        newNotAttendingList = newNotAttendingList.filter(id => id !== pollResponse.userId);
+        newAttendingList = newAttendingList.filter(id => id !== pollResponse.username);
+        newNotAttendingList = newNotAttendingList.filter(id => id !== pollResponse.username);
 
         if(pollResponse.status == "attending"){
-          newAttendingList.push(pollResponse.userId);
+          newAttendingList.push(pollResponse.username);
         }
         else{
-          newNotAttendingList.push(pollResponse.userId);
+          newNotAttendingList.push(pollResponse.username);
         }
         response.attendingList = newAttendingList;
         response.NotAttendingList = newNotAttendingList;
@@ -149,10 +149,10 @@ export default function EventsPage() {
         };
 
         if(pollResponse.status == "attending"){
-          attendanceData.attendingList.push(pollResponse.userId);
+          attendanceData.attendingList.push(pollResponse.username);
         }
         else{
-          attendanceData.NotAttendingList.push(pollResponse.userId);
+          attendanceData.NotAttendingList.push(pollResponse.username);
         }
 
         try {
@@ -200,11 +200,11 @@ export default function EventsPage() {
         }}
         eventClick= {function(info) {
           const uid = info.event.id;
-          const fetchProfile = async () => {
+          const fetchEventData = async () => {
             try {
               const response = await publicFetch.get(`/api/events/get_event/${uid}`);
               const eventData = response;
-
+              
               const eventUserId = eventData.userId;
 
               if (currentUserId !== eventUserId) {
@@ -218,11 +218,11 @@ export default function EventsPage() {
               }
             } 
             catch (err) {
-              console.error("Error fetching profile:", err.message);
-              alert("Failed to load profile data.");
+              console.error("Error events data:", err.message);
+              alert("Failed to load event data.");
             }
           };
-          fetchProfile();
+          fetchEventData();
         }}
         events={events}
         editable

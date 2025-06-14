@@ -3,12 +3,14 @@ import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import { auth } from "./firebase";
 import { useRouter } from "next/navigation";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { useCreateUserWithEmailAndPassword, useUpdateProfile } from "react-firebase-hooks/auth";
+import { authFetch } from '../utils/apis';
 
 function Signup() {
   const router = useRouter();
 
-  const [createUserWithEmailAndPassword, error] = useCreateUserWithEmailAndPassword(auth);
+  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth);
+  const [updateProfile] = useUpdateProfile(auth);
   const [username, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");  
@@ -16,23 +18,25 @@ function Signup() {
   const onSubmit = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(email, password);
+      await updateProfile({ displayName: username });
       const user = userCredential.user;
-      const user_data = auth.currentUser;
 
-      const token = await user.getIdToken();
+      const body = {
+        email: user.email,
+        name: username,
+      };
 
-      // Replace with your actual FastAPI backend URL
-      await fetch("http://localhost:8000/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          email: user.email,
-          name: username,  
-        }),
-      });
+      const createAccount = async () => {
+        try {
+          const data = await authFetch.post(`/api/users`, body); // Assuming backend has this endpoint
+        } 
+        catch (err) {
+          console.error("Error fetching profile:", err.message);
+          alert("Failed to load profile data.");
+        }
+      };
+
+      createAccount();
 
       alert("Sign up successful!");
       router.push("/");

@@ -6,7 +6,7 @@ import { publicFetch } from '../utils/apis';
 export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event }) {
   const [status, setStatus] = useState(null); // "attending" or "not_attending"
   const [user, loading] = useAuthState(auth);
-  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
 
   // Attending list data setters
   const [attendingList, setAttendingList] = useState([]);
@@ -17,7 +17,7 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
     if (!status) return alert("Please select your attendance status.");
 
     const pollResponse = {
-      userId,
+      username,
       status,
     };
 
@@ -26,7 +26,7 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
     onClose();
   };
 
-  const get_event_data = async () => {
+  const get_event_attendance_data= async () => {
     const eventId = event.id;
 
     try {
@@ -40,8 +40,14 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
       setNotAttendingList(notAttendingList);
     } 
     catch (error) {
-      console.error("Error getting event data:", error.message);
-      alert("Failed to get event data.");
+      // Get current lists
+      let attendingList = [...([])];
+      let notAttendingList = [...([])];  
+
+      setAttendingList(attendingList);
+      setNotAttendingList(notAttendingList);
+
+      console.error("No one has RSVP for this event yet:");
     }
   }
 
@@ -51,18 +57,17 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
       console.log("User is not logged in");
     } 
     else {
-      setUserId(user.uid);
+      setUsername(user.displayName);
       
     }
-  }, [user, loading, isOpen, event]);
+    if (isOpen && event?.id) {
+      get_event_attendance_data();
+    }
+  }, [user, loading, isOpen, event?.id]);
 
   if(!isOpen){
     return null
   }
-  else{
-    get_event_data();
-  };
-
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
