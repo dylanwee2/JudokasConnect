@@ -8,6 +8,7 @@ import { publicFetch } from '../utils/apis';
 import EventModal from '../components/addEventModal';
 import EditEventModal from '../components/editEventModal';
 import EventAttendanceModal from '../components/eventAttendance';
+import EventAdminModal from '../components/eventAdminModal';
 
 import { auth } from "../pages/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -29,8 +30,10 @@ export default function EventsPage() {
   // Open modals
   const [addEventsModal, setAddEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [editEventsModal, setEditEventsModal] = useState(false); 
+  const [eventAdminModalOpen, setEventAdminModal] = useState(false); 
   const [attendanceModalOpen, setOpenAttendanceModal] = useState(false);
+  const [editEventsModal, setEditEventsModal] = useState(false); 
+
 
   const router = useRouter();
 
@@ -79,29 +82,29 @@ export default function EventsPage() {
   };
 
   // Update Event 
-  const handleSave = async () => {
-    try {
-      await publicFetch.put(`/api/events/update_event/${selectedEvent.id}`, selectedEvent);
-      
-      // Optionally update event in your calendar UI (e.g. FullCalendar)
-      const calendarApi = calendarRef.current.getApi();
-      const existingEvent = calendarApi.getEventById(selectedEvent.id);
-      if (existingEvent) {
-        existingEvent.setProp('title', selectedEvent.title);
-        existingEvent.setStart(selectedEvent.start);
-        existingEvent.setEnd(selectedEvent.end);
-      }
+    const handleSave = async () => {
+        try {
+        await publicFetch.put(`/api/events/update_event/${selectedEvent.id}`, selectedEvent);
+        
+        // Optionally update event in your calendar UI (e.g. FullCalendar)
+        const calendarApi = calendarRef.current.getApi();
+        const existingEvent = calendarApi.getEventById(selectedEvent.id);
+        if (existingEvent) {
+            existingEvent.setProp('title', selectedEvent.title);
+            existingEvent.setStart(selectedEvent.start);
+            existingEvent.setEnd(selectedEvent.end);
+        }
 
-      setEditEventsModal(false);
+        setEditEventsModal(false);
 
-      // Update UI
-      loadEvents();
-    } 
-    catch (err) {
-      console.error("Error saving event:", err.message);
-      alert("Failed to update event.");
-    }
-  };
+        // Update UI
+        loadEvents();
+        } 
+        catch (err) {
+        console.error("Error saving event:", err.message);
+        alert("Failed to update event.");
+        }
+    };
 
   // Update attendance
   const updateAttendance = async (pollResponse) => {
@@ -214,7 +217,7 @@ export default function EventsPage() {
               else{
                 // Open modal with event data
                 setSelectedEvent(eventData);
-                setEditEventsModal(true);
+                setEventAdminModal(true);
               }
             } 
             catch (err) {
@@ -236,12 +239,36 @@ export default function EventsPage() {
         onSubmit={handleAddEvent}
       />
 
+      <EventAdminModal
+        isOpen={eventAdminModalOpen}
+        onClose={() => setEventAdminModal(false)}
+        event={selectedEvent}
+        setEvent={setSelectedEvent}
+        onSave={(action, event) => {
+          if (action === "open_attendance") {
+            setOpenAttendanceModal(true);
+          }
+          if (action === "edit_event") {
+            setEditEventsModal(true);
+          }
+        }}
+      />
+
       <EditEventModal
         isOpen={editEventsModal}
         onClose={() => setEditEventsModal(false)}
         event={selectedEvent}
         setEvent={setSelectedEvent}
-        onSave={handleSave}
+        onSave={async () => {
+          try {
+            await publicFetch.put(`/api/events/update_event/${selectedEvent.id}`, selectedEvent);
+            setEditEventsModal(false);
+            await loadEvents(); // Refresh calendar
+          } catch (err) {
+            console.error("Error saving event:", err.message);
+            alert("Failed to update event.");
+          }
+        }}
       />
 
       <EventAttendanceModal

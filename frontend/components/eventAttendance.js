@@ -71,34 +71,47 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl">
-        <h2 className="text-xl font-semibold mb-4">Are you attending?</h2>
+      <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-xl overflow-y-auto max-h-[90vh]">
+        <h2 className="text-2xl font-bold mb-4">Event Attendance</h2>
 
-        {/* Attending List */}
-        <div className="mb-4">
-          <h3 className="text-sm font-semibold text-green-700 mb-1">✅ Attending:</h3>
-          {attendingList.length > 0 ? (
-            <ul className="list-disc list-inside text-sm text-gray-800">
-              {attendingList.map((id) => (
-                <li key={id}>{id}</li>
+        {/* Event Details */}
+        <div className="mb-6 bg-gray-100 p-4 rounded">
+          <h3 className="text-lg font-medium text-gray-800 mb-2">Event Details</h3>
+          <p><span className="font-semibold">Title:</span> {event?.title || "N/A"}</p>
+          <p>
+            <span className="font-semibold">Start:</span>{" "}
+            {event?.start ? new Date(event.start).toLocaleString() : "N/A"}
+          </p>
+          <p>
+            <span className="font-semibold">End:</span>{" "}
+            {event?.end ? new Date(event.end).toLocaleString() : "N/A"}
+          </p>
+        </div>
+
+        {/* Attendance Lists */}
+        <div className="mb-6">
+          <h3 className="text-lg font-semibold mb-2 text-green-700">Attending</h3>
+          {attendingList?.length > 0 ? (
+            <ul className="list-disc list-inside text-gray-800">
+              {attendingList.map((username, index) => (
+                <li key={index}>{username}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">No one is attending yet.</p>
+            <p className="text-gray-500">No one is attending yet.</p>
           )}
         </div>
 
-        {/* Not Attending List */}
         <div className="mb-6">
-          <h3 className="text-sm font-semibold text-red-700 mb-1">❌ Not Attending:</h3>
-          {notAttendingList.length > 0 ? (
-            <ul className="list-disc list-inside text-sm text-gray-800">
-              {notAttendingList.map((id) => (
-                <li key={id}>{id}</li>
+          <h3 className="text-lg font-semibold mb-2 text-red-700">Not Attending</h3>
+          {notAttendingList?.length > 0 ? (
+            <ul className="list-disc list-inside text-gray-800">
+              {notAttendingList.map((username, index) => (
+                <li key={index}>{username}</li>
               ))}
             </ul>
           ) : (
-            <p className="text-sm text-gray-500">No one has declined yet.</p>
+            <p className="text-gray-500">No one has declined yet.</p>
           )}
         </div>
 
@@ -122,6 +135,7 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
           </button>
         </div>
 
+        {/* Close Button */}
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
