@@ -3,7 +3,7 @@ import { auth } from "../pages/firebase";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 
-export default function EventModal({ isOpen, onClose, onSubmit }) {
+export default function EventModal({ isOpen, onClose, onSubmit}) {
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
