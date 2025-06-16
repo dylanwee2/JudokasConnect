@@ -45,3 +45,10 @@ class Discussion:
         except Exception as e:
             print(f"Error updating event: {e}")
             raise HTTPException(status_code=500, detail="Failed to update forum.")
+        
+    def delete_discussion(self, forum_id: str):
+        try:
+            self.db.collection("discussions").document(forum_id).delete()
+        except Exception as e:
+            print(f"Error updating event: {e}")
+            raise HTTPException(status_code=500, detail="Failed to delete forum.")

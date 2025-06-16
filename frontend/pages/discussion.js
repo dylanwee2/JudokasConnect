@@ -38,6 +38,7 @@ export default function ForumPage() {
     console.log(forumData);
     try {
       await publicFetch.post(`/api/discussions/add_dicussion`, forumData);
+      get_all_discussions();
     } 
     catch (error) {
         console.error("Error adding forum:", error.message);
@@ -54,6 +55,24 @@ export default function ForumPage() {
     catch (error) {
         console.error("Error adding forum:", error.message);
         alert("Failed to add forum.");
+    }
+  };
+
+  const clickEditForumButton = async (forumData) => {
+    if(user.uid == forumData.userId){
+      setEditDiscussionModalOpen(true);
+    }
+  };
+
+  const deleteForum = async (forumData) => {
+    const forumId = forumData.id;
+    try {
+      await publicFetch.delete(`/api/discussions/delete_discussion/${forumId}`);
+      get_all_discussions();
+    } 
+    catch (error) {
+        console.error("Error deleting forum:", error.message);
+        alert("Failed to delete forum.");
     }
   };
 
@@ -103,18 +122,45 @@ export default function ForumPage() {
       {/* Thread List */}
       <div className="space-y-5">
         {threads.map((thread) => (
-          <div key={thread.id}
+          <div
+            key={thread.id}
             className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
-            onClick= {() =>{
-                setEditDiscussionModalOpen(true);
-                setSelectedThread(thread);
-              }}>
+          >
+            {/* Title + Edit/Delete buttons */}
             <div className="flex justify-between items-center mb-1">
               <h2 className="text-xl font-semibold hover:text-blue-600 cursor-pointer">
                 {thread.title}
               </h2>
+
+              {user.displayName === thread.username && (
+                <div className="flex gap-2 items-center ml-4">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      clickEditForumButton(thread);
+                      setSelectedThread(thread);
+                    }}
+                    className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteForum(thread);
+                    }}
+                    className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
+
+            {/* Content */}
             <p className="text-gray-600 mb-2 line-clamp-2">{thread.content}</p>
+
+            {/* Tags + Author */}
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex items-center gap-2">
                 <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">

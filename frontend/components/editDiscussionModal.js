@@ -38,8 +38,7 @@ export default function EditThreadModal({ isOpen, onClose, onSubmit, threaddata}
         setUserId(user.uid);
         setUsername(user.displayName);
         }
-        
-        console.log(threaddata);
+
         if (isOpen && threaddata) {
             setTitle(threaddata.title || "");
             setCategory(threaddata.category || "General");
