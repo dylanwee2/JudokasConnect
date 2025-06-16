@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 
 import NewThreadModal from "../components/addDiscussionModal";
 import EditThreadModal from "../components/editDiscussionModal";
-
+import CommentModal from "../components/commentsModal";
 
 export default function ForumPage() {
   // Load discussion data
@@ -17,6 +17,13 @@ export default function ForumPage() {
   // Open Modals
   const [addDiscussionModal, setAddDiscussionModalOpen] = useState(false);
   const [editDiscussionModal, setEditDiscussionModalOpen] = useState(false);
+  const [commentModal, setCommentModalOpen] = useState(false);
+
+  // Comments
+  const [comments, setComments] = useState([
+    { id: '1', username: 'dylanwee', text: 'Nice post!' },
+    { id: '2', username: 'bob', text: 'I agree with this.' },
+  ]);
 
   // User account data 
   const [user, loading] = useAuthState(auth);
@@ -57,6 +64,26 @@ export default function ForumPage() {
         alert("Failed to add forum.");
     }
   };
+
+  const clickForum = async (forumData) => {
+    setCommentModalOpen(true);
+  };
+
+  const handleAddComment = () => {
+    // Add comment logic here
+    console.log("add comment");
+  };
+
+  const handleEditComment = (comment) => {
+    // Edit comment logic here]
+    console.log("edit comment");
+  };
+
+  const handleDeleteComment = (comment) => {
+    // Delete logic here
+    console.log("delte comment");
+  };
+
 
   const clickEditForumButton = async (forumData) => {
     if(user.uid == forumData.userId){
@@ -125,6 +152,9 @@ export default function ForumPage() {
           <div
             key={thread.id}
             className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
+            onClick={() => {
+              clickForum(thread);
+            }}
           >
             {/* Title + Edit/Delete buttons */}
             <div className="flex justify-between items-center mb-1">
@@ -177,6 +207,16 @@ export default function ForumPage() {
         isOpen={addDiscussionModal}
         onClose={() => setAddDiscussionModalOpen(false)}
         onSubmit={addForum}
+      />
+
+      <CommentModal
+        isOpen={commentModal}
+        onClose={() => setCommentModalOpen(false)}
+        comments={comments}
+        currentUser={user}
+        onAddComment={handleAddComment}
+        onEditComment={handleEditComment}
+        onDeleteComment={handleDeleteComment}
       />
 
       <EditThreadModal
