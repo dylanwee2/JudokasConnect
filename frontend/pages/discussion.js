@@ -8,24 +8,15 @@ import EditThreadModal from "../components/editDiscussionModal";
 import CommentModal from "../components/commentsModal";
 
 export default function ForumPage() {
-  // Load discussion data
   const [threads, setThreads] = useState([]);
-
-  // Set selected thread data
+  const [thread_data, setThreadData] = useState([]);
   const [selectedThread, setSelectedThread] = useState(null);
 
-  // Open Modals
   const [addDiscussionModal, setAddDiscussionModalOpen] = useState(false);
   const [editDiscussionModal, setEditDiscussionModalOpen] = useState(false);
   const [commentModal, setCommentModalOpen] = useState(false);
 
-  // Comments
-  const [comments, setComments] = useState([
-    { id: '1', username: 'dylanwee', text: 'Nice post!' },
-    { id: '2', username: 'bob', text: 'I agree with this.' },
-  ]);
-
-  // User account data 
+  const [comments, setComments] = useState([]);
   const [user, loading] = useAuthState(auth);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
@@ -34,22 +25,19 @@ export default function ForumPage() {
     try {
       const discussions_data = await publicFetch.get(`/api/discussions/`);
       setThreads(discussions_data);
-    } 
-    catch (error) {
-        console.error("Error adding forum:", error.message);
-        alert("Failed to add forum.");
+    } catch (error) {
+      console.error("Error fetching forum data:", error.message);
+      alert("Failed to fetch forums.");
     }
   };
 
   const addForum = async (forumData) => {
-    console.log(forumData);
     try {
       await publicFetch.post(`/api/discussions/add_dicussion`, forumData);
       get_all_discussions();
-    } 
-    catch (error) {
-        console.error("Error adding forum:", error.message);
-        alert("Failed to add forum.");
+    } catch (error) {
+      console.error("Error adding forum:", error.message);
+      alert("Failed to add forum.");
     }
   };
 
@@ -58,36 +46,9 @@ export default function ForumPage() {
     try {
       await publicFetch.put(`/api/discussions/update_discussion/${forumId}`, forumData);
       get_all_discussions();
-    } 
-    catch (error) {
-        console.error("Error adding forum:", error.message);
-        alert("Failed to add forum.");
-    }
-  };
-
-  const clickForum = async (forumData) => {
-    setCommentModalOpen(true);
-  };
-
-  const handleAddComment = () => {
-    // Add comment logic here
-    console.log("add comment");
-  };
-
-  const handleEditComment = (comment) => {
-    // Edit comment logic here]
-    console.log("edit comment");
-  };
-
-  const handleDeleteComment = (comment) => {
-    // Delete logic here
-    console.log("delte comment");
-  };
-
-
-  const clickEditForumButton = async (forumData) => {
-    if(user.uid == forumData.userId){
-      setEditDiscussionModalOpen(true);
+    } catch (error) {
+      console.error("Error editing forum:", error.message);
+      alert("Failed to edit forum.");
     }
   };
 
@@ -96,41 +57,80 @@ export default function ForumPage() {
     try {
       await publicFetch.delete(`/api/discussions/delete_discussion/${forumId}`);
       get_all_discussions();
-    } 
-    catch (error) {
-        console.error("Error deleting forum:", error.message);
-        alert("Failed to delete forum.");
+    } catch (error) {
+      console.error("Error deleting forum:", error.message);
+      alert("Failed to delete forum.");
+    }
+  };
+
+  const clickForum = (thread) => {
+    setCommentModalOpen(true);
+    setThreadData(thread);
+    setComments(thread.comments);
+  };
+
+  const handleAddComment = async (updatedThreadData) => {
+    const commentId = updatedThreadData.id;
+    try {
+      await publicFetch.put(`/api/discussions/update_discussion/${commentId}`, updatedThreadData);
+      get_all_discussions();
+    } catch (error) {
+      console.error("Error adding comment:", error.message);
+      alert("Failed to add comment.");
+    }
+  };
+
+  const handleEditComment = async (updatedThreadData) => {
+    const commentId = updatedThreadData.id;
+    try {
+      await publicFetch.put(`/api/discussions/update_discussion/${commentId}`, updatedThreadData);
+      get_all_discussions();
+    } catch (error) {
+      console.error("Error editing comment:", error.message);
+      alert("Failed to edit comment.");
+    }
+  };
+
+  const handleDeleteComment = async (updatedThreadData) => {
+    const commentId = updatedThreadData.id;
+    try {
+      await publicFetch.put(`/api/discussions/update_discussion/${commentId}`, updatedThreadData);
+      get_all_discussions();
+    } catch (error) {
+      console.error("Error deleting comment:", error.message);
+      alert("Failed to delete comment.");
+    }
+  };
+
+  const clickEditForumButton = (forumData) => {
+    if (user.uid === forumData.userId) {
+      setEditDiscussionModalOpen(true);
     }
   };
 
   useEffect(() => {
-    if (loading) return; // wait until loading is done
-
+    if (loading) return;
     if (!user) {
-    console.log("User is not logged in");
-    }
-    else {
-    setUserId(user.uid);
-    setUsername(user.displayName);
-    get_all_discussions();
+      console.log("User not logged in");
+    } else {
+      setUserId(user.uid);
+      setUsername(user.displayName);
+      get_all_discussions();
     }
   }, [user, loading]);
 
-
   return (
     <div className="max-w-6xl mx-auto px-6 py-10">
-      {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">💬 Discussion Forum</h1>
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                onClick= {() => {
-                setAddDiscussionModalOpen(true);
-                }}>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          onClick={() => setAddDiscussionModalOpen(true)}
+        >
           + New Post
         </button>
       </div>
 
-      {/* Search + Filter */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <input
           type="text"
@@ -146,45 +146,47 @@ export default function ForumPage() {
         </select>
       </div>
 
-      {/* Thread List */}
       <div className="space-y-5">
         {threads.map((thread) => (
           <div
             key={thread.id}
             className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
-            onClick={() => {
-              clickForum(thread);
-            }}
+            onClick={() => clickForum(thread)}
           >
-            {/* Title + Edit/Delete buttons */}
+            {/* Title and Controls in one row */}
             <div className="flex justify-between items-center mb-1">
               <h2 className="text-xl font-semibold hover:text-blue-600 cursor-pointer">
                 {thread.title}
               </h2>
 
-              {user.displayName === thread.username && (
-                <div className="flex gap-2 items-center ml-4">
-                  <button 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      clickEditForumButton(thread);
-                      setSelectedThread(thread);
-                    }}
-                    className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteForum(thread);
-                    }}
-                    className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition"
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
+              <div className="flex flex-col items-end ml-4">
+                {user?.displayName === thread.username && (
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        clickEditForumButton(thread);
+                        setSelectedThread(thread);
+                      }}
+                      className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        deleteForum(thread);
+                      }}
+                      className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+                <span className="text-sm text-gray-500 mt-1">
+                  💬 {thread.comments?.length || 0} Comments
+                </span>
+              </div>
             </div>
 
             {/* Content */}
@@ -200,6 +202,7 @@ export default function ForumPage() {
               </div>
             </div>
           </div>
+
         ))}
       </div>
 
@@ -212,8 +215,9 @@ export default function ForumPage() {
       <CommentModal
         isOpen={commentModal}
         onClose={() => setCommentModalOpen(false)}
-        comments={comments}
+        comments={comments || []}
         currentUser={user}
+        threadData={thread_data}
         onAddComment={handleAddComment}
         onEditComment={handleEditComment}
         onDeleteComment={handleDeleteComment}
@@ -225,7 +229,6 @@ export default function ForumPage() {
         onSubmit={editForum}
         threaddata={selectedThread}
       />
-
     </div>
   );
 }
