@@ -8,12 +8,22 @@ To Build Project
 docker compose build
 ```
 
-To Stop Project
+Git Commands
 ```shell
-docker compose down
-```
+// To add all file changes to staged changes (files you want to push)
+git add . 
 
-To Create Branch
-```shell
+// To check what files are in staged changes
+
+// To commit files to github
+git commit -m "[Feature] Commit Name"
+
+// To push files to remote github
+git push origin branch_name
+
+// To swap branch
 git checkout -b branchname
+
+// To pull files from remote github
+git pull origin branch_name
 ```
