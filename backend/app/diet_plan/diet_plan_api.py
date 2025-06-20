@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load environment variables
 load_dotenv()
 
-video_analysis_router = APIRouter(
+diet_plan_router = APIRouter(
     prefix="/api/diet_plan",
     tags=["diet_plan"],
 )
@@ -15,7 +15,7 @@ video_analysis_router = APIRouter(
 # Set your API key
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-@video_analysis_router.post("/")
+@diet_plan_router.post("/")
 async def generate_response():
     prompt = """
         You are an assistant tasked with generating a structured meal plan based on user health data.
