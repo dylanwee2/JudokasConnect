@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 from typing import Optional
 from app.blob import VideoFormData
+from app.user.user import User
+
+user = User()
 
 # Load environment variables
 env_path = Path(__file__).resolve().parent.parent.parent / "env" / ".env.local"
@@ -78,13 +81,16 @@ async def list_images():
             props = blob_client.get_blob_properties()
             metadata = props.metadata or {}
 
+            userData = user.get_user(metadata.get("userId", ""))
+
             images.append({
                 "name": blob.name,
                 "url": blob_client.url,
                 "id": metadata.get("id", ""),
                 "title": metadata.get("title", ""),
                 "desc": metadata.get("desc", ""),
-                "userId": metadata.get("userId", "")
+                "userId": metadata.get("userId", ""),
+                "username": userData.get("name", "")
             })
 
         return {"images": images}

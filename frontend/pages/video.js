@@ -17,6 +17,7 @@ export default function Home() {
   const [usename, setUsername] = useState(null);
 
   const [videos, setVideos] = useState([]);
+  const [videosLoading, setVideosLoading] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
     desc: '',
@@ -28,7 +29,6 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    get_Videos();
     if (loading) return; // wait until loading is done
 
     if (!user) {
@@ -40,17 +40,37 @@ export default function Home() {
       console.log("User:", user);
       setUserId(user.uid);
       setUsername(user.displayName);
+      // Load videos after user is authenticated
+      get_Videos();
     }
-  }, [user, loading]);
+  }, [user, loading, router]);
 
   const get_Videos = async () => {
     try {
-      const response = await publicFetch.get(`/api/images/list`);
-      console.log(response.data);
-      setVideos(response.data || []);
+      setVideosLoading(true);
+      const response = await publicFetch.get('/api/images/list');
+      console.log("Videos response:", response);
+      
+      // Handle the response structure from backend
+      if (response.images) {
+        const videoList = response.images.map(image => ({
+          id: image.id,
+          title: image.title || 'Untitled Video',
+          desc: image.desc || 'No description',
+          url: image.url,
+          userId: image.userId,
+          username: image.username
+        }));
+        setVideos(videoList);
+      } else {
+        setVideos([]);
+      }
     } catch (err) {
       console.error("Error getting videos", err.message);
       alert("Failed to get videos.");
+      setVideos([]);
+    } finally {
+      setVideosLoading(false);
     }
   };
 
@@ -89,12 +109,12 @@ export default function Home() {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/images/upload`, {
         method: "POST",
         body: formDataToSend,
-        });
+      });
         
       const contentType = response.headers.get('content-type');
 
       if (!response.ok) {
-        const errorText = await response.text(); // fallback for HTML error page
+        const errorText = await response.text();
         console.error("Raw error response:", errorText);
         throw new Error("Upload failed - see console for details.");
       }
@@ -104,9 +124,11 @@ export default function Home() {
         console.log("Upload success", data);
 
         const newVideo = {
+          id: data.id,
           title: data.title,
           desc: data.desc,
           url: data.videoLink,
+          userId: data.userId
         };
 
         setVideos([newVideo, ...videos]);
@@ -122,22 +144,39 @@ export default function Home() {
       console.error("Upload failed", err.message);
       alert("Failed to upload video.");
     }
-
   };
 
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <main className="p-4 max-w-5xl mx-auto">
+        <div className="text-center">
+          <p>Loading...</p>
+        </div>
+      </main>
+    );
+  }
 
+  // Don't render anything if user is not authenticated
+  if (!user) {
+    return null;
+  }
 
   return (
     <main className="p-4 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-center">🎬 VideoShare</h1>
-
-      <div className="text-center mb-6">
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-        >
-          Upload Video
-        </button>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex-1 text-center">
+          <h1 className="text-3xl font-bold">🎬 Video Sharing Platform</h1>
+          <p className="text-3xl">Learn from the best!</p>
+        </div>
+        <div className="ml-4">
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
+            Upload Video
+          </button>
+        </div>
       </div>
 
       {showModal && (
@@ -161,6 +200,7 @@ export default function Home() {
                 value={formData.title}
                 onChange={handleChange}
                 className="border p-2 rounded"
+                required
               />
               <input
                 type="text"
@@ -182,11 +222,25 @@ export default function Home() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-        {videos.map((video, index) => (
-          <VideoCard key={index} video={video} />
-        ))}
+      {/* Video Display Section */}
+      <div className="mt-6">
+        {videosLoading ? (
+          <div className="text-center">
+            <p>Loading videos...</p>
+          </div>
+        ) : videos.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {videos.map((video, index) => (
+              <VideoCard key={video.id || index} video={video} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500 text-lg">No videos uploaded yet</p>
+            <p className="text-gray-400 text-sm mt-2">Be the first to share a video!</p>
+          </div>
+        )}
       </div>
     </main>
   );
-} 
+}
