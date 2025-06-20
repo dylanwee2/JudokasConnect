@@ -35,7 +35,7 @@ export default function Navbar() {
               <a href="/" className="text-gray-600 hover:text-blue-600">Home</a>
               <a href="/events" className="text-gray-600 hover:text-blue-600">Training Sessions</a>
               <a href="/discussion" className="text-gray-600 hover:text-blue-600">Discussion</a>
-              <a href="/resourcehub" className="text-gray-600 hover:text-blue-600">Resource Hub</a>
+              <a href="video_analysis" className="text-gray-600 hover:text-blue-600">Video Analysis</a>
             </div>
           </div>
         
