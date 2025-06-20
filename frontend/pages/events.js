@@ -176,7 +176,8 @@ export default function EventsPage() {
       console.log("User is not logged in");
       alert("Please login to view training sessions");
       router.push('/');
-    } else {
+    } 
+    else {
       console.log("User:", user);
       setUserId(user.uid);
       loadEvents();

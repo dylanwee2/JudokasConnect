@@ -9,19 +9,21 @@ import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 function Login() {
   const router = useRouter();
 
-  const [signinWithEmailAndPassword, error] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword, userCredential, loading, error] = useSignInWithEmailAndPassword(auth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");  
 
   const onSubmit = async () => {
-    await signinWithEmailAndPassword(email, password);
+    const result = await signInWithEmailAndPassword(email, password);
+    
     if (error) {
       alert("Login failed: " + error.message);
     } 
     else {
       router.push("/"); // Redirect to login page after successful signup
     }
-  }
+}
+
 
   return (
     <div className={styles.container}>
