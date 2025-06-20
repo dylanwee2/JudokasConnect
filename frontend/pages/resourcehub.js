@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function Resourcehub() {
     const [exercises, setExercises] = useState([]);
-    
+
     useEffect(() => {
     const get_all_exercises = async () => {
       try {
@@ -60,6 +60,10 @@ return (
           </div>
         </Link>
       ))}
+
+      <button>
+        <a href="/dietplan">Diet Plan</a>
+      </button>
     </div>
   );
 }
