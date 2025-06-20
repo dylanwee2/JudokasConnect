@@ -3,7 +3,6 @@ import { publicFetch } from '../utils/apis';
 import Image from 'next/image';
 import Link from 'next/link';
 
-
 export default function Resourcehub() {
     const [exercises, setExercises] = useState([]);
 
@@ -25,9 +24,9 @@ export default function Resourcehub() {
 return (
     <div className="flex flex-col items-center gap-6 p-6 bg-gray-50 min-h-screen">
       {exercises.map((exercise, index) => (
-        <Link
+        <Link 
           key={index}
-          href={`/resourcehub/${exercise.eid}`} // Navigate to dynamic route
+          href={`/resourcehub/${exercise.id}`} // Navigate to dynamic route
           className="w-full max-w-4xl"
         >
           <div className="flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden w-full cursor-pointer hover:shadow-xl transition-shadow">
@@ -49,13 +48,8 @@ return (
               </div>
             </div>
             <div className="relative w-full md:w-1/3 aspect-video">
-              <Image
-                src="/circuit_trg.jpg"
-                alt={exercise.name}
-                width={400}
-                height={300}
-                className="object-cover w-full h-full"
-              />
+      <img src={exercise.photoUrl || "/placeholder.png"} alt="My Image" />
+
             </div>
           </div>
         </Link>
