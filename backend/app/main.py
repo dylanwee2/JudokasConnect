@@ -5,7 +5,7 @@ from app.user.user_api import user_router
 from app.event.event_api import event_router
 from app.exercises.exercise_api import exercises_router
 from app.discussion.discussion_api import discussion_router
-from app.video_analysis.video_analysis_api import video_analysis_router
+from backend.app.diet_plan.diet_plan_api import video_analysis_router
 
 app = FastAPI()
 

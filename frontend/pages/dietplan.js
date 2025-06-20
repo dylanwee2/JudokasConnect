@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { publicFetch } from '../utils/apis';
 
-export default function Video_analysis() {
+export default function DietPlan() {
   const handleUpload = async () => {
     console.log("handle function working");
     try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/video_analysis`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/diet_plan`, {
         method: "POST",
         });
 

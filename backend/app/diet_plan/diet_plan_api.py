@@ -8,8 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 video_analysis_router = APIRouter(
-    prefix="/api/video_analysis",
-    tags=["video_analysis"],
+    prefix="/api/diet_plan",
+    tags=["diet_plan"],
 )
 
 # Set your API key
@@ -41,5 +41,5 @@ async def generate_response():
         }
 
     except Exception as e:
-        print("Error in /api/video_analysis:", str(e))
+        print("Error in /api/diet_plan:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
