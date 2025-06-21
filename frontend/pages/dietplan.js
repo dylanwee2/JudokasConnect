@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { publicFetch } from '../utils/apis';
+
+import { auth } from "../pages/firebase";
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 export default function DietPlan() {
   const [hasPersonalData, setHasPersonalData] = useState(false);
@@ -16,20 +20,20 @@ export default function DietPlan() {
     dietaryRestrictions: ''
   });
 
-  // Check if user has personal data on component mount
-  useEffect(() => {
-    checkPersonalData();
-  }, []);
+  const [user, loading] = useAuthState(auth);
+  const [userId, setUserId] = useState(null);
 
-  const checkPersonalData = async () => {
+  const checkPersonalData = async (userId) => {
     try {
-      // Replace with your actual API call to check if user has personal data
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/personal-data`);
-      // const data = await response.json();
-      // setHasPersonalData(data.hasData);
-      
-      // For demo purposes, setting to false initially
-      setHasPersonalData(false);
+      const response = await publicFetch.get(`/api/diet_plan/get_user_diet_plan/${userId}`);
+
+      if (!response) {
+        setHasPersonalData(false);
+      } else {
+        setHasPersonalData(true);
+        setDietPlan(response);  // Also set diet plan here if needed
+      }
+
     } catch (error) {
       console.error('Error checking personal data:', error);
     }
@@ -48,18 +52,15 @@ export default function DietPlan() {
     setIsLoading(true);
     
     try {
-      // Submit personal data to your backend
-      // const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/personal-data`, {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(personalData)
-      // });
-      
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       setHasPersonalData(true);
-      generateDietPlan();
+      const diet_plan = await generateDietPlan();
+      diet_plan["userId"] = userId;
+
+      // Submit personal data to your backend
+      const response = await publicFetch.post(`/api/diet_plan/add_diet_plan`, diet_plan);
     } catch (error) {
       console.error('Error submitting personal data:', error);
     } finally {
@@ -87,9 +88,8 @@ export default function DietPlan() {
 
       try {
         const parsedJson = JSON.parse(cleaned);
-        // setDietPlan(parsedJson);
         console.log("✅ Diet plan loaded:", parsedJson);
-        setDietPlan({
+        const diet_plan = {
           calorie_goal: parsedJson.calorie_goal,
           user_summary: parsedJson.user_summary,
           macros: parsedJson.macros,
@@ -97,7 +97,10 @@ export default function DietPlan() {
           totals: parsedJson.totals,
           extra_tips: parsedJson.extra_tips,
           notes: parsedJson.notes
-        });
+        }
+        setDietPlan(diet_plan);
+
+        return diet_plan;
       } catch (err) {
         console.error("❌ JSON Parse Error:", err);
       }
@@ -107,6 +110,19 @@ export default function DietPlan() {
       setIsLoading(false);
     }
   };
+
+    // Check if user has personal data on component mount
+  useEffect(() => {
+    if (loading || !user) return;
+
+    if (!user) {
+      console.log("User not logged in");
+    } else {
+      setUserId(user.uid);
+    }
+
+    checkPersonalData(user.uid);
+  }, [user, loading]);
 
   // Personal Data Collection UI
   if (!hasPersonalData) {

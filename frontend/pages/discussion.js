@@ -112,7 +112,8 @@ export default function ForumPage() {
     if (loading) return;
     if (!user) {
       console.log("User not logged in");
-    } else {
+    } 
+    else {
       setUserId(user.uid);
       setUsername(user.displayName);
       get_all_discussions();
