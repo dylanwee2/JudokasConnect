@@ -125,10 +125,30 @@ export default function ForumPage() {
     } catch (error) {
       console.error("Error fetching forum data:", error.message);
       alert("Failed to fetch forums.");
-    }
-
-    
+    }    
   }
+
+  const searchForum = async () => {
+    const searchWord = document.getElementById("searchForum").value;
+    const filterWord = searchWord.toLowerCase();
+
+    try {
+      const discussions_data = await publicFetch.get(`/api/discussions/`);
+
+      for(let i=0; i < discussions_data.length; i++){
+         // Filter threads where the title includes the full input string
+        const filteredThreads = discussions_data.filter(thread =>
+          thread.title.toLowerCase().includes(filterWord)
+        );
+
+        setThreads(filteredThreads);
+      }
+    } catch (error) {
+      console.error("Error fetching forum data:", error.message);
+      alert("Failed to fetch forums.");
+    }  
+  }
+
 
   useEffect(() => {
     if (loading) return;
@@ -158,7 +178,9 @@ export default function ForumPage() {
         <input
           type="text"
           placeholder="Search topics..."
+          id="searchForum"
           className="w-full sm:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          onChange={searchForum}
         />
         <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
           id="filterCategory"
