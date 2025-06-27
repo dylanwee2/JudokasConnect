@@ -108,6 +108,28 @@ export default function ForumPage() {
     }
   };
 
+  const filterThreads = async () => {
+    const selectedCategory = document.getElementById("filterCategory").value;
+
+    try {
+      const discussions_data = await publicFetch.get(`/api/discussions/`);
+
+      for(let i=0; i < discussions_data.length; i++){
+        if (selectedCategory === "All") {
+          setThreads(discussions_data);
+        } else {
+          const filteredThreads = discussions_data.filter(thread => thread.category === selectedCategory);
+          setThreads(filteredThreads);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching forum data:", error.message);
+      alert("Failed to fetch forums.");
+    }
+
+    
+  }
+
   useEffect(() => {
     if (loading) return;
     if (!user) {
@@ -138,12 +160,14 @@ export default function ForumPage() {
           placeholder="Search topics..."
           className="w-full sm:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
         />
-        <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none">
-          <option>All Categories</option>
-          <option>General</option>
-          <option>Announcements</option>
-          <option>Help</option>
-          <option>Off Topic</option>
+        <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
+          id="filterCategory"
+          onChange={filterThreads}>
+          <option value="All">All Categories</option>
+          <option value="General">General</option>
+          <option value="Announcements">Announcements</option>
+          <option value="Help">Help</option>
+          <option value="OffTopic">Off Topic</option>
         </select>
       </div>
 
