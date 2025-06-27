@@ -37,4 +37,10 @@ class Exercises:
         db.collection("exercises").document(doc_id).update({"id": doc_id})
 
         return {"message": f"Exercise added successfully with ID {doc_id}", "id": doc_id}
+    
+    def get_exercise_by_id(self, id):
+        doc = db.collection("exercises").document(id).get()
+        if not doc.exists:
+            raise HTTPException(status_code=404, detail=f"Exercise with ID {id} not found")
+        return doc.to_dict()
 

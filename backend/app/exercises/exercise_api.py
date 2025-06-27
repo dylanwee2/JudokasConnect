@@ -25,12 +25,12 @@ def get_all_exercises():
         )
 
 @exercises_router.get("/{id}")
-def get_subexercises(id: str):
+def get_exercises(id: str):
     try:
-        subexercises_data = exercises.get_subexercises(id)
+        exercise_data = exercises.get_exercise_by_id(id)
         return JSONResponse(
             status_code=HTTP_200_OK,
-            content=subexercises_data
+            content=exercise_data
         )
     except Exception as e:
         return JSONResponse(
