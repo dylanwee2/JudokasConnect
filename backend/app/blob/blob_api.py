@@ -83,9 +83,7 @@ async def list_images():
             blob_client = container_client.get_blob_client(blob.name)
             props = blob_client.get_blob_properties()
             metadata = props.metadata or {}
-
-            userData = user.get_user(metadata.get("userId", ""))
-
+            
             images.append({
                 "name": blob.name,
                 "url": blob_client.url,
