@@ -7,3 +7,4 @@ class VideoFormData(BaseModel):
     desc: str
     userId: str
     videoLink: str
+    username: str

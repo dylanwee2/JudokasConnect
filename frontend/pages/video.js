@@ -14,7 +14,7 @@ export default function Home() {
 
   // Set Current User ID Function
   const [currentUserId, setUserId] = useState(null);
-  const [usename, setUsername] = useState(null);
+  const [username, setUsername] = useState(null);
 
   const [videos, setVideos] = useState([]);
   const [videosLoading, setVideosLoading] = useState(true);
@@ -103,6 +103,7 @@ export default function Home() {
     formDataToSend.append('title', formData.title);
     formDataToSend.append('desc', formData.desc);
     formDataToSend.append('userId', currentUserId);
+    formDataToSend.append('username', username);
     formDataToSend.append('file', videoFile);
 
     try {
@@ -121,6 +122,7 @@ export default function Home() {
 
       if (contentType && contentType.includes('application/json')) {
         const data = await response.json();
+        alert("Video being uploaded. Please wait a moment before refreshing the page.");
         console.log("Upload success", data);
 
         const newVideo = {
@@ -128,7 +130,8 @@ export default function Home() {
           title: data.title,
           desc: data.desc,
           url: data.videoLink,
-          userId: data.userId
+          userId: data.userId,
+          username: data.username
         };
 
         setVideos([newVideo, ...videos]);
@@ -192,7 +195,7 @@ export default function Home() {
 
             <h2 className="text-2xl font-semibold mb-4">Submit Your Video</h2>
             <form className="grid grid-cols-1 gap-4" onSubmit={handleSubmit}>
-              <p><b>Username: {usename}</b></p>
+              <p><b>Username: {username}</b></p>
               <input
                 type="text"
                 name="title"

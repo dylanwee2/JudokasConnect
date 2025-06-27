@@ -40,7 +40,8 @@ async def upload_image(
     id: Optional[str] = Form(""),
     title: str = Form(...),
     desc: str = Form(...),
-    userId: str = Form(...)
+    userId: str = Form(...),
+    username: str = Form(...)
 ):
     try:
         filename = f"{uuid4()}_{file.filename}"
@@ -49,7 +50,8 @@ async def upload_image(
             "id": filename,
             "title": title,
             "desc": desc,
-            "userId": userId
+            "userId": userId,
+            "username": username
         }
         blob_client = container_client.get_blob_client(filename)
         blob_client.upload_blob(file.file, overwrite=True, metadata=metadata)
@@ -63,6 +65,7 @@ async def upload_image(
             title=title,
             desc=desc,
             userId=userId,
+            username=username,
             videoLink=image_url
         )
 
@@ -80,9 +83,7 @@ async def list_images():
             blob_client = container_client.get_blob_client(blob.name)
             props = blob_client.get_blob_properties()
             metadata = props.metadata or {}
-
-            userData = user.get_user(metadata.get("userId", ""))
-
+            
             images.append({
                 "name": blob.name,
                 "url": blob_client.url,
@@ -90,7 +91,7 @@ async def list_images():
                 "title": metadata.get("title", ""),
                 "desc": metadata.get("desc", ""),
                 "userId": metadata.get("userId", ""),
-                "username": userData.get("name", "")
+                "username": metadata.get("username", "")
             })
 
         return {"images": images}
