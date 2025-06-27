@@ -27,7 +27,7 @@ export default function DietPlan() {
     try {
       const response = await publicFetch.get(`/api/diet_plan/get_user_diet_plan/${userId}`);
 
-      if (!response) {
+      if (response.message == "Diet Plan not found") {
         setHasPersonalData(false);
       } else {
         setHasPersonalData(true);
