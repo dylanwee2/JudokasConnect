@@ -108,11 +108,54 @@ export default function ForumPage() {
     }
   };
 
+  const filterThreads = async () => {
+    const selectedCategory = document.getElementById("filterCategory").value;
+
+    try {
+      const discussions_data = await publicFetch.get(`/api/discussions/`);
+
+      for(let i=0; i < discussions_data.length; i++){
+        if (selectedCategory === "All") {
+          setThreads(discussions_data);
+        } else {
+          const filteredThreads = discussions_data.filter(thread => thread.category === selectedCategory);
+          setThreads(filteredThreads);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching forum data:", error.message);
+      alert("Failed to fetch forums.");
+    }    
+  }
+
+  const searchForum = async () => {
+    const searchWord = document.getElementById("searchForum").value;
+    const filterWord = searchWord.toLowerCase();
+
+    try {
+      const discussions_data = await publicFetch.get(`/api/discussions/`);
+
+      for(let i=0; i < discussions_data.length; i++){
+         // Filter threads where the title includes the full input string
+        const filteredThreads = discussions_data.filter(thread =>
+          thread.title.toLowerCase().includes(filterWord)
+        );
+
+        setThreads(filteredThreads);
+      }
+    } catch (error) {
+      console.error("Error fetching forum data:", error.message);
+      alert("Failed to fetch forums.");
+    }  
+  }
+
+
   useEffect(() => {
     if (loading) return;
     if (!user) {
       console.log("User not logged in");
-    } else {
+    } 
+    else {
       setUserId(user.uid);
       setUsername(user.displayName);
       get_all_discussions();
@@ -135,14 +178,18 @@ export default function ForumPage() {
         <input
           type="text"
           placeholder="Search topics..."
+          id="searchForum"
           className="w-full sm:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          onChange={searchForum}
         />
-        <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none">
-          <option>All Categories</option>
-          <option>General</option>
-          <option>Announcements</option>
-          <option>Help</option>
-          <option>Off Topic</option>
+        <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
+          id="filterCategory"
+          onChange={filterThreads}>
+          <option value="All">All Categories</option>
+          <option value="General">General</option>
+          <option value="Announcements">Announcements</option>
+          <option value="Help">Help</option>
+          <option value="OffTopic">Off Topic</option>
         </select>
       </div>
 
