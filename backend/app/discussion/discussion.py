@@ -50,5 +50,5 @@ class Discussion:
         try:
             self.db.collection("discussions").document(forum_id).delete()
         except Exception as e:
-            print(f"Error updating event: {e}")
+            print(f"Error deleting event: {e}")
             raise HTTPException(status_code=500, detail="Failed to delete forum.")

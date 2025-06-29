@@ -24,3 +24,16 @@ def create_users(userObject: UserCreate, userId: str = Depends(auth.authenticate
         "data": user_data
     }
     return result
+
+@user_router.put("/update_user/{uid}")
+def update_user(uid: str, userObject: UserCreate, userId: str = Depends(auth.authenticate)):
+    userObject.uid = uid  # Ensure the uid is set
+    return user.update_user(userObject)
+
+
+
+@user_router.delete("/delete_user/{uid}")
+def delete_user(uid: str, userId: str = Depends(auth.authenticate)):
+    # Update your User class to accept uid as a string
+    return user.delete_user(uid)
+    
