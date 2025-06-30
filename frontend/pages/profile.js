@@ -7,8 +7,6 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useRouter } from "next/navigation";
 import { authFetch } from '../utils/apis';
 import EditUserModal from "../components/editUserModal";   
-import { publicFetch } from '../utils/apis';
-
 
 export default function Profile() {
     const router = useRouter();
@@ -17,6 +15,7 @@ export default function Profile() {
 
     const [editUserModal, setEditUserModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [userEmail, setUserEmail] = useState(null);
 
 
     const editProfile = async (profileData) => {
@@ -46,6 +45,7 @@ export default function Profile() {
           router.push('/login');
         } 
         else {
+          setUserEmail(user.email);
           const fetchProfile = async () => {
             try {
               const data = await authFetch.get(`/api/users/${user.uid}`); // Assuming backend has this endpoint
@@ -92,12 +92,6 @@ export default function Profile() {
               >
                 Edit
               </button>
-              <button
-                onClick={handleLogout}
-                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-              >
-                Add Friend
-              </button>
             </div>
             </div>
           </div>
@@ -107,7 +101,7 @@ export default function Profile() {
         <div className="m-10">
           <div className="bg-gray-700 rounded-xl p-4">
             <p className="text-gray-300 leading-relaxed">
-              {profile.bio || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
+              {profile.bio || "Please update your profile with a bio."}
             </p>
           </div>
         </div>
@@ -128,10 +122,8 @@ export default function Profile() {
                 </div>
                 <div className="flex items-center pt-3">
                   <img src="/email_logo.png" alt="Email Logo" className="w-7 h-7 mb-4 mr-2"/>
-                  <p className="text-white mb-2 flex items-center">Email: {user.email}</p>
+                  <p className="text-white mb-2 flex items-center">Email: {userEmail}</p>
                 </div>
-                
-                
               </div>
           </div>
         </div>
