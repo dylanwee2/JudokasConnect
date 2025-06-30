@@ -47,8 +47,7 @@ export default function DietPlan() {
     }));
   };
 
-  const handleSubmitPersonalData = async (e) => {
-    e.preventDefault();
+  const handleSubmitPersonalData = async () => {
     setIsLoading(true);
     
     try {
@@ -57,10 +56,6 @@ export default function DietPlan() {
       
       setHasPersonalData(true);
       const diet_plan = await generateDietPlan();
-      diet_plan["userId"] = userId;
-
-      // Submit personal data to your backend
-      const response = await publicFetch.post(`/api/diet_plan/add_diet_plan`, diet_plan);
     } catch (error) {
       console.error('Error submitting personal data:', error);
     } finally {
@@ -71,25 +66,31 @@ export default function DietPlan() {
   const generateDietPlan = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/diet_plan`, {
-        method: "POST",
-      });
+      personalData['userId'] = userId;  // Add userId to personalData
 
-      if (!res.ok) {
-        const errText = await res.text();
-        throw new Error(`API Error: ${res.status} - ${errText}`);
-      }
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/diet_plan/get_new_diet_plan`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(personalData)  // Make sure personalData is a valid object
+      });
 
       const raw = await res.json();
       const rawText = raw?.data;
 
-      // Remove the ```json ... ``` block wrapper
+      if (!rawText) {
+        console.error("❌ No 'data' field found in response");
+        return;
+      }
+
+      // Clean the Gemini response (if it includes ```json ... ```)
       const cleaned = rawText.replace(/^```json\s*|\s*```$/g, '');
 
       try {
         const parsedJson = JSON.parse(cleaned);
-        console.log("✅ Diet plan loaded:", parsedJson);
         const diet_plan = {
+          userId : userId,  // Add userId to diet_plan
           calorie_goal: parsedJson.calorie_goal,
           user_summary: parsedJson.user_summary,
           macros: parsedJson.macros,
@@ -97,15 +98,41 @@ export default function DietPlan() {
           totals: parsedJson.totals,
           extra_tips: parsedJson.extra_tips,
           notes: parsedJson.notes
-        }
+        };
         setDietPlan(diet_plan);
+
+        try {
+        const response = await publicFetch.get(`/api/diet_plan/get_user_diet_plan/${userId}`);
+
+        if (response.message == "Diet Plan not found") {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/diet_plan/add_diet_plan`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(diet_plan)
+          });
+        } else {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/diet_plan/update_diet_plan/${userId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(diet_plan)
+          });
+        }
+
+      } catch (error) {
+        console.error('Error checking personal data:', error);
+      }
 
         return diet_plan;
       } catch (err) {
         console.error("❌ JSON Parse Error:", err);
+        console.log("💬 Raw text received:", cleaned);
       }
     } catch (error) {
-      console.error("Error generating diet plan:", error);
+      console.error("🚨 Error generating diet plan:", error);
     } finally {
       setIsLoading(false);
     }
@@ -171,6 +198,19 @@ export default function DietPlan() {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., 175"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Current BMI</label>
+                    <input
+                      type="number"
+                      name="currentBMI"
+                      value={personalData.currentBMI}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., 30"
                       required
                     />
                   </div>
@@ -289,7 +329,7 @@ export default function DietPlan() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 pt-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Personalized Diet Plan</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Personalized AI Diet Plan</h1>
           <p className="text-gray-600">Tailored nutrition to help you reach your goals</p>
         </div>
 
@@ -406,13 +446,6 @@ export default function DietPlan() {
             <div className="flex justify-center space-x-4 pt-6">
               <button
                 onClick={() => setHasPersonalData(false)}
-                className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Update Personal Data
-              </button>
-              <button
-                onClick={generateDietPlan}
-                disabled={isLoading}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
                 Generate New Plan

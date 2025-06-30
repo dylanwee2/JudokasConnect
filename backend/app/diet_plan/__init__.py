@@ -10,3 +10,12 @@ class BaseDietPlan(BaseModel):
     totals: Dict[str, int]
     extra_tips: str
     notes: str
+
+class PersonalDietPlanData(BaseModel):
+    currentWeight : int
+    targetWeight : int
+    currentBMI : int
+    height: int
+    age: int
+    goal : str
+    activityLevel : str
