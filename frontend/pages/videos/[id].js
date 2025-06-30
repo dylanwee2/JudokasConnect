@@ -34,7 +34,7 @@ export default function VideoPage() {
 
     try {
       await publicFetch.delete(`/api/images/${id}`);
-      router.push("/video"); // Redirect to homepage
+      router.push("/video"); // Redirect after delete
     } catch (error) {
       console.error("Delete failed", error.message);
       alert("Failed to delete video.");
@@ -61,24 +61,34 @@ export default function VideoPage() {
 
   return (
     <main className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">{video.title}</h1>
+      {/* Header with title and buttons */}
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">{video.title}</h1>
+        <div className="flex gap-2">
+          {isOwner && (
+            <button
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-1 rounded hover:bg-red-700"
+            >
+              Delete
+            </button>
+          )}
+          <button
+            onClick={() => router.push('/video')}
+            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+          >
+            Back
+          </button>
+        </div>
+      </div>
+
       <video controls className="w-full rounded mb-4" preload="metadata">
         <source src={video.url} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
+
       <p className="mb-2 text-gray-700">{video.desc}</p>
       <p className="text-sm text-gray-500">Uploaded by @{video.username}</p>
-
-      {isOwner && (
-        <div className="mt-6 text-right">
-          <button
-            onClick={handleDelete}
-            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-          >
-            Delete Video
-          </button>
-        </div>
-      )}
     </main>
   );
 }

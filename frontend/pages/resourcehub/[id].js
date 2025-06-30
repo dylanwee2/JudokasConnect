@@ -53,7 +53,15 @@ export default function ExerciseDetail() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-6">
-      <h1 className="text-3xl font-bold mb-4">{exercise.name}</h1>
+    <div className="flex justify-between items-center mb-4">
+      <h1 className="text-3xl font-bold">{exercise.name}</h1>
+      <button
+        onClick={() => router.back()}
+        className="text-blue-600 hover:underline text-sm"
+      >
+        ← Back
+      </button>
+    </div>
       <p className="text-gray-700 mb-2">⏱️ {exercise.duration} minutes</p>
       <p className="text-gray-700 mb-4">🔥 {exercise.calories} calories</p>
 
