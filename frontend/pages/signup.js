@@ -23,7 +23,7 @@ function Signup() {
 
       const body = {
         email: user.email,
-        name: username,
+        username: username,
       };
 
       const createAccount = async () => {

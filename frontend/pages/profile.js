@@ -80,7 +80,7 @@ export default function Profile() {
           <div className="w-full ml-10 pt-5 bold inline">
             <div className="flex items-center justify-between pl-10 pr-10"> 
               <h1 className="text-2xl font-bold mr-6">
-                Welcome, {profile.name || user.email}
+                Welcome, {profile.name || userEmail || "User"}
               </h1>
               <div>
               <button
@@ -122,7 +122,7 @@ export default function Profile() {
                 </div>
                 <div className="flex items-center pt-3">
                   <img src="/email_logo.png" alt="Email Logo" className="w-7 h-7 mb-4 mr-2"/>
-                  <p className="text-white mb-2 flex items-center">Email: {userEmail}</p>
+                  <p className="text-white mb-2 flex items-center">Email: {userEmail || ""}</p>
                 </div>
               </div>
           </div>
