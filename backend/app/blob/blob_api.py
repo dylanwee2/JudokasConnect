@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Request
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Request, status
 from azure.storage.blob import BlobServiceClient
 from uuid import uuid4
 import os
@@ -97,3 +97,48 @@ async def list_images():
         return {"images": images}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to list images: {str(e)}")
+
+@image_router.get("/{video_id}")
+async def get_image(video_id: str):
+    try:
+        # Try to get the blob by name (filename is used as ID)
+        blob_client = container_client.get_blob_client(video_id)
+        
+        if not blob_client.exists():
+            raise HTTPException(status_code=404, detail="Video not found")
+
+        props = blob_client.get_blob_properties()
+        metadata = props.metadata or {}
+
+        video = {
+            "id": metadata.get("id", ""),
+            "title": metadata.get("title", "Untitled"),
+            "desc": metadata.get("desc", ""),
+            "userId": metadata.get("userId", ""),
+            "username": metadata.get("username", ""),
+            "url": blob_client.url
+        }
+
+        return {"video": video}
+    
+    except Exception as e:
+        print("[FETCH VIDEO ERROR]", e)
+        raise HTTPException(status_code=500, detail=f"Failed to fetch video: {str(e)}")
+
+@image_router.delete("/{video_id}")
+async def delete_video(video_id: str):
+    try:
+        blob_client = container_client.get_blob_client(video_id)
+
+        if not blob_client.exists():
+            raise HTTPException(status_code=404, detail="Video not found")
+
+        # Permanently deletes the video file + all its metadata
+        blob_client.delete_blob(delete_snapshots="include")
+
+        print(f"[DELETE SUCCESS] Deleted {video_id}")
+        return {"message": "Video deleted successfully"}
+        
+    except Exception as e:
+        print("[DELETE ERROR]", e)
+        raise HTTPException(status_code=500, detail=f"Failed to delete video: {str(e)}")

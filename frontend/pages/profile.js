@@ -15,6 +15,7 @@ export default function Profile() {
 
     const [editUserModal, setEditUserModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [username, setUsername] = useState(null);
     const [userEmail, setUserEmail] = useState(null);
 
 
@@ -45,6 +46,7 @@ export default function Profile() {
           router.push('/login');
         } 
         else {
+          setUsername(user.displayName);
           setUserEmail(user.email);
           const fetchProfile = async () => {
             try {
@@ -80,7 +82,7 @@ export default function Profile() {
           <div className="w-full ml-10 pt-5 bold inline">
             <div className="flex items-center justify-between pl-10 pr-10"> 
               <h1 className="text-2xl font-bold mr-6">
-                Welcome, {profile.name || userEmail || "User"}
+                Welcome, {username || "User"}
               </h1>
               <div>
               <button
