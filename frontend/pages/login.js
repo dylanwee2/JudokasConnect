@@ -16,8 +16,8 @@ function Login() {
   const onSubmit = async () => {
     const result = await signInWithEmailAndPassword(email, password);
     
-    if (error) {
-      alert("Login failed: " + error.message);
+    if (!result) {
+      alert("Login failed, try again.");
     } 
     else {
       router.push("/"); // Redirect to login page after successful signup

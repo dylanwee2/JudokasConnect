@@ -55,9 +55,6 @@ return (
         </Link>
       ))}
 
-      <button>
-        <a href="/dietplan">Diet Plan</a>
-      </button>
     </div>
   );
 }
