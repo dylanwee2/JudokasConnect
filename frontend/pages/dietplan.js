@@ -343,9 +343,21 @@ export default function DietPlan() {
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-8 pt-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Personalized AI Diet Plan</h1>
-          <p className="text-gray-600">Tailored nutrition to help you reach your goals</p>
+        <div className="text-left mb-8 pt-8 flex justify-center">
+          <div className='block'> 
+            <h1 className="text-3xl font-bold text-gray-900">Your Personalized AI Diet Plan</h1>
+            <p className="text-gray-600">Tailored nutrition to help you reach your goals</p>
+          </div>
+        
+          {/* Action Buttons */}
+          <div className="space-x-4 justify-end ml-auto">
+            <button
+              onClick={() => setHasPersonalData(false)}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            >
+              Generate New Plan
+            </button>
+          </div>
         </div>
 
         {isLoading ? (
@@ -457,15 +469,6 @@ export default function DietPlan() {
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex justify-center space-x-4 pt-6">
-              <button
-                onClick={() => setHasPersonalData(false)}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
-              >
-                Generate New Plan
-              </button>
-            </div>
           </div>
         ) : (
           <div className="text-center py-20">
