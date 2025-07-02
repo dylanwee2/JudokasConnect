@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 class BaseDietPlan(BaseModel):
     userId: str
@@ -12,10 +12,13 @@ class BaseDietPlan(BaseModel):
     notes: str
 
 class PersonalDietPlanData(BaseModel):
-    currentWeight : int
-    targetWeight : int
-    currentBMI : int
-    height: int
+    currentWeight: int
+    targetWeight: int
+    goal: str
     age: int
-    goal : str
-    activityLevel : str
+    gender: str
+    targetBMI: float
+    height: int
+    activityLevel: str
+    dietaryRestrictions: Optional[str] = None
+

@@ -10,11 +10,11 @@ export default function DietPlan() {
   const [dietPlan, setDietPlan] = useState(null);
   const [personalData, setPersonalData] = useState({
     currentWeight: '',
-    currentBMI: '',
     targetWeight: '',
-    targetBMI: '',
     goal: '',
     age: '',
+    gender: '',
+    targetBMI: '',
     height: '',
     activityLevel: '',
     dietaryRestrictions: ''
@@ -177,6 +177,21 @@ export default function DietPlan() {
                   </h3>
                   
                   <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                    <select
+                      name="gender"
+                      value={personalData.gender}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    >
+                      <option value="">Select gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </select>
+                  </div>
+
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Current Weight (kg)</label>
                     <input
                       type="number"
@@ -198,19 +213,6 @@ export default function DietPlan() {
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., 175"
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Current BMI</label>
-                    <input
-                      type="number"
-                      name="currentBMI"
-                      value={personalData.currentBMI}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="e.g., 30"
                       required
                     />
                   </div>
@@ -242,6 +244,19 @@ export default function DietPlan() {
                       type="number"
                       name="targetWeight"
                       value={personalData.targetWeight}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="e.g., 65"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Target BMI</label>
+                    <input
+                      type="number"
+                      name="targetBMI"
+                      value={personalData.targetBMI}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="e.g., 65"

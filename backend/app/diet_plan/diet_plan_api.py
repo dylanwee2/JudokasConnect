@@ -92,8 +92,6 @@ def get_new_diet_plan(diet_plan_object: PersonalDietPlanData):
         # Call Gemini AI model
         g_model = genai.GenerativeModel("models/gemini-2.0-flash-lite")
         gemini_response = g_model.generate_content(prompt)
-        print("Gemini ai response")
-        print(gemini_response.text)
         return {
             "data": gemini_response.text,
         }
