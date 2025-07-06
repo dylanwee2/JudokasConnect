@@ -14,3 +14,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+
+// pages/firebase.js
+export default function FirebasePage() {
+  return <div>This is the Firebase page</div>;
+}
