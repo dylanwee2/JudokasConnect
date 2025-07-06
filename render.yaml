@@ -4,8 +4,6 @@ services:
     env: docker
     repo: https://github.com/defton290/JudokasConnect
     dockerfilePath: frontend/Dockerfile
-    buildCommand: ""
-    startCommand: "npm run dev"
     envVars:
       - key: PORT
         value: 3000
@@ -17,8 +15,6 @@ services:
     env: docker
     repo: https://github.com/defton290/JudokasConnect
     dockerfilePath: backend/Dockerfile
-    buildCommand: ""
-    startCommand: "uvicorn main:app --host 0.0.0.0 --port 8000"
     envVars:
       - key: PORT
         value: 8000
