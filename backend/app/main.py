@@ -16,6 +16,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "https://frontend-bjj7.onrender.com",  # deployed frontend
+        "https://judokas-connect-live-lpzofmb6m-dylan-wee-jia-juns-projects.vercel.app/"
     ], 
     allow_credentials=True,
     allow_methods=["*"],
