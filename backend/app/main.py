@@ -13,7 +13,10 @@ app = FastAPI()
 # Allow local frontend during development
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Change to your frontend domain
+    allow_origins=[
+        "http://localhost:3000",
+        "https://frontend-bjj7.onrender.com",  # deployed frontend
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
