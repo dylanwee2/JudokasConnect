@@ -2,8 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Install dependencies
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+# Copy lock files and package.json from frontend folder
+COPY frontend/package.json frontend/yarn.lock* frontend/package-lock.json* frontend/pnpm-lock.yaml* frontend/.npmrc* ./
+
 RUN \
   if [ -f yarn.lock ]; then yarn; \
   elif [ -f package-lock.json ]; then npm install; \
@@ -11,7 +12,8 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-COPY . .
+# Copy the rest of the frontend app
+COPY frontend/ ./
 
 EXPOSE 3000
 

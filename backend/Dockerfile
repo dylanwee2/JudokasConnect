@@ -2,15 +2,13 @@ FROM python:3.9
 
 WORKDIR /code
 
-
-COPY ./requirements.txt /code/requirements.txt
+COPY backend/requirements.txt /code/requirements.txt
 
 
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-
-COPY ./app /code/app
-COPY ./env /code/env
+COPY backend/app /code/app
+COPY backend/env /code/env
 
 
 CMD ["fastapi", "run", "app/main.py", "--port", "8000" , "--reload"]

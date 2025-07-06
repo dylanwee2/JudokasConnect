@@ -4,7 +4,6 @@ services:
     env: docker
     repo: https://github.com/defton290/JudokasConnect
     dockerfilePath: frontend/Dockerfile
-    contextPath: frontend
     envVars:
       - key: PORT
         value: 3000
@@ -16,7 +15,6 @@ services:
     env: docker
     repo: https://github.com/defton290/JudokasConnect
     dockerfilePath: backend/Dockerfile
-    contextPath: backend
     envVars:
       - key: PORT
         value: 8000
