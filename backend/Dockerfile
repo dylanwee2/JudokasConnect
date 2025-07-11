@@ -10,7 +10,6 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 
 COPY backend/app /code/app
-COPY backend/env /code/env
 
 
 CMD ["fastapi", "run", "app/main.py", "--port", "8000" , "--reload"]
