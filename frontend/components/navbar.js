@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { auth } from "../pages/firebase";
 import { signOut } from "firebase/auth";
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export default function Navbar() {
   const router = useRouter();
   const [user, loading] = useAuthState(auth);
+  const [photoUrl, setPhotoUrl] = useState(null);
   
   useEffect(() => {
     if (loading) return; // wait until loading is done
@@ -15,6 +16,12 @@ export default function Navbar() {
       console.log("User is not logged in");
     } else {
       console.log("User:", user);
+      const storedPhoto = localStorage.getItem("userPhoto");
+      if (storedPhoto) {
+      setPhotoUrl(storedPhoto);
+    } else {
+      setPhotoUrl(null);
+    }
     }
   }, [user, loading]);
 
@@ -43,7 +50,11 @@ export default function Navbar() {
         
           <div className="flex items-center space-x-4">
             <a href="/profile">
-                <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
+                {photoUrl ? (
+                  <img src={photoUrl} alt="Profile" className="h-8 w-8 rounded-full" />
+                ) : (
+                  <img src="/profile.svg" alt="Default Profile" className="h-8 w-8 rounded-full" />
+                )}
             </a>
             {user && (
               <>

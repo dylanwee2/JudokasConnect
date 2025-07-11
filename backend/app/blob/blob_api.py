@@ -1,13 +1,17 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Request, status
-from azure.storage.blob import BlobServiceClient
-from uuid import uuid4
 import os
+from uuid import uuid4
 from dotenv import load_dotenv
 from pathlib import Path
 from typing import Optional
+
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
+from azure.storage.blob import BlobServiceClient
+
+from app.auth.auth import Auth
 from app.blob import VideoFormData
 from app.user.user import User
 
+auth = Auth()
 user = User()
 
 # Load environment variables
@@ -68,6 +72,24 @@ async def upload_image(
             username=username,
             videoLink=image_url
         )
+
+    except Exception as e:
+        print("[UPLOAD ERROR]", e)
+        raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
+    
+@image_router.post("/profilePhoto/{userId}")
+async def upload_profile_image(
+    userId: str,
+    file: UploadFile = File(...)
+) -> str:
+    try:
+        filename = f"{userId}"
+        blob_client = container_client.get_blob_client(filename)
+        blob_client.upload_blob(file.file, overwrite=True)
+
+        image_url = blob_client.url
+
+        return image_url
 
     except Exception as e:
         print("[UPLOAD ERROR]", e)
