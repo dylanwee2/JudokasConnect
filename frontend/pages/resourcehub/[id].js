@@ -52,7 +52,8 @@
     if (!exercise) return <div className="p-6">Loading...</div>;
 
     return (
-      <div className="p-6 max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-6">
+      <div className="bg-[hsl(207,50%,90%)] p-10">
+    <div className="bg-gray-100 p-6 max-w-3xl mx-auto shadow-lg rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-3xl font-bold">{exercise.name}</h1>
         <button
@@ -93,6 +94,7 @@
             </div>
           ))}
         </div>
+    </div>
       </div>
     );
   }

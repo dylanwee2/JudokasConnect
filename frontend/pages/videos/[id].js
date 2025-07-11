@@ -60,6 +60,7 @@ export default function VideoPage() {
   const isOwner = user && user.uid === video.userId;
 
   return (
+    <div className='bg-[hsl(207,50%,90%)] min-h-full pb-100'>
     <main className="p-4 max-w-3xl mx-auto">
       {/* Header with title and buttons */}
       <div className="flex items-center justify-between mb-4">
@@ -90,5 +91,6 @@ export default function VideoPage() {
       <p className="mb-2 text-gray-700">{video.desc}</p>
       <p className="text-sm text-gray-500">Uploaded by @{video.username}</p>
     </main>
+    </div>
   );
 }
