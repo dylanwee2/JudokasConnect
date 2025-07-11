@@ -109,78 +109,82 @@ export default function Home() {
   if (!user) return null;
 
   return (
-    <main className="p-4 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-10 border-b pb-4">
-        <div className="text-left">
-          <h2 className="text-3xl font-extrabold">🎬 Upload and discover insights from fellow Judokas!</h2>
+    <div className="bg-[hsl(207,50%,90%)] min-h-screen">
+      <main className="p-4 max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-10 border-b pb-4">
+          <div className="text-left">
+            <h2 className="text-[hsl(191,30%,60%)] text-3xl font-extrabold"> Upload and discover insights from fellow Judokas!</h2>
+          </div>
+          <button
+            onClick={() => setShowModal(true)}
+            className="bg-[#B8D2D8] text-black px-6 py-2 rounded-lg shadow hover:shadow-md hover:scale-105 transition"
+          >
+            + Upload Video
+          </button>
         </div>
-        <button
-          onClick={() => setShowModal(true)}
-         className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
-        >
-          + Upload Video
-        </button>
-      </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
-            <button
-              type="button"
-              onClick={() => setShowModal(false)}
-              className="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-2xl"
-            >
-              &times;
-            </button>
-
-            <h2 className="text-2xl font-bold mb-6 text-center">Submit Your Video</h2>
-            <form className="space-y-4" onSubmit={handleSubmit}>
-              <p className="text-sm font-semibold">Logged in as: <span className="text-blue-700">{username}</span></p>
-              <input
-                type="text"
-                name="title"
-                placeholder="Video Title"
-                value={formData.title}
-                onChange={handleChange}
-                className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              />
-              <textarea
-                name="desc"
-                placeholder="Video Description"
-                value={formData.desc}
-                onChange={handleChange}
-                className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={3}
-              />
-              <UploadModal onUpload={handleUpload} />
+        {showModal && (
+          <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md relative">
               <button
-                type="submit"
-                className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="absolute top-3 right-4 text-gray-400 hover:text-red-500 text-2xl"
               >
-                Submit
+                &times;
               </button>
-            </form>
-          </div>
-        </div>
-      )}
 
-      <section className="mt-10">
-        {videosLoading ? (
-          <div className="text-center text-gray-500">Loading videos...</div>
-        ) : videos.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {videos.map((video, index) => (
-              <VideoCard key={video.id || index} video={video} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-10 text-gray-400">
-            <p className="text-lg">No videos uploaded yet.</p>
-            <p className="text-sm mt-1">Be the first to share your journey!</p>
+              <h2 className="text-2xl font-bold mb-6 text-center">Submit Your Video</h2>
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <p className="text-sm font-semibold">Logged in as: <span className="text-blue-700">{username}</span></p>
+                <input
+                  type="text"
+                  name="title"
+                  placeholder="Video Title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+                <textarea
+                  name="desc"
+                  placeholder="Video Description"
+                  value={formData.desc}
+                  onChange={handleChange}
+                  className="w-full border p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                />
+                <UploadModal onUpload={handleUpload} />
+                <button
+                  type="submit"
+                  className="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
           </div>
         )}
-      </section>
-    </main>
+
+        <section className="mt-10">
+          {videosLoading ? (
+            <div className="text-center text-gray-500">Loading videos...</div>
+          ) : videos.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {videos.map((video, index) => (
+                <div className='bg-gray-100'>
+                  <VideoCard key={video.id || index} video={video} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-10 text-gray-400">
+              <p className="text-lg">No videos uploaded yet.</p>
+              <p className="text-sm mt-1">Be the first to share your journey!</p>
+            </div>
+          )}
+        </section>
+      </main>
+    </div>
   );
 }

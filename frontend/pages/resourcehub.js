@@ -22,14 +22,18 @@ export default function Resourcehub() {
   }, []); // <- empty dependency array ensures it runs only once
 
 return (
-    <div className="flex flex-col items-center gap-6 p-6 bg-gray-50 min-h-screen">
+    
+    <div className="bg-[hsl(207,50%,90%)] flex flex-col items-center gap-6 p-6 min-h-screen">
+      <div className="text-left">
+        <h2 className="text-[hsl(191,30%,60%)] text-3xl font-extrabold"> Types of Exercises! </h2>
+      </div>
       {exercises.map((exercise, index) => (
         <Link 
           key={index}
           href={`/resourcehub/${exercise.id}`} // Navigate to dynamic route
-          className="w-full max-w-4xl"
+          className="bg-gray-100 w-full max-w-4xl"
         >
-          <div className="flex flex-col md:flex-row items-center bg-white rounded-2xl shadow-lg overflow-hidden w-full cursor-pointer hover:shadow-xl transition-shadow">
+          <div className="bg-gray-100 flex flex-col md:flex-row items-center rounded-2xl shadow-lg overflow-hidden w-full cursor-pointer hover:shadow-xl transition-shadow">
             <div className="flex flex-col justify-center p-6 flex-grow">
               <h2 className="text-2xl font-bold mb-4">{exercise.name}</h2>
               <div className="flex flex-wrap gap-6 text-gray-700 text-sm">

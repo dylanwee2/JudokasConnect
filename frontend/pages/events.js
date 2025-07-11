@@ -185,8 +185,10 @@ export default function EventsPage() {
   }, [user, loading]);
 
   return (
-    <div className="mx-20">
+    <div className="bg-[hsl(207,50%,90%)] pt-5">
+    <div className="pb-20 px-20">
       <h1 className="text-3xl font-bold mt-5 mb-6">Training Sessions</h1>
+      <div className="bg-gray-100 rounded-lg shadow-lg p-4">
       <FullCalendar
         ref={calendarRef}
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -233,6 +235,7 @@ export default function EventsPage() {
         selectable
         nowIndicator
       />
+      </div>
 
       <EventModal
         isOpen={addEventsModal}
@@ -279,5 +282,6 @@ export default function EventsPage() {
         onSubmit={updateAttendance}
       />
     </div>    
+    </div>
   );
 }
