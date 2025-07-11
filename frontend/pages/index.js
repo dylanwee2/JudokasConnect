@@ -39,48 +39,14 @@ function Home() {
           text-black font-semibold
           hover:text-white hover:bg-orange-500
           text-center sm:text-lg md:text-lg lg:text-2xl xl:text-2xl">
-          <a href='/login'>Login</a>
-          </button>
-        </div>
-        
-
-        <div className="flex justify-left gap-4 mt-50 ml-20">
-          <button className="bg-white shadow rounded-full 
-          sm:h-10 sm:w-10
-          md:h-12 md:w-12
-          lg:h-14 lg:w-14
-          xl:h-14 xl:w-14
-          
-          flex items-center justify-center text-3xl">
-            🗓️
-          </button>
-          <button className="bg-white shadow rounded-full 
-          sm:h-10 sm:w-10
-          md:h-12 md:w-12
-          lg:h-14 lg:w-14
-          xl:h-14 xl:w-14
-          
-          flex items-center justify-center text-3xl">
-            🎥
-          </button>
-          <button className="bg-white shadow rounded-full 
-          sm:h-10 sm:w-10
-          md:h-12 md:w-12
-          lg:h-14 lg:w-14
-          xl:h-14 xl:w-14
-          
-          flex items-center justify-center text-3xl">
-            💬
+            <a href='/login'>Login</a>
           </button>
         </div>
       </div>
 
-      
-
-            
       <div className="ml-20 mt-10 mr-20">
         <h1 className="text-4xl font-semibold">Latest News</h1>
-        <div className="grid gap-20 grid-cols-1 md:grid-cols-3">
+        <div className=" py-5 grid gap-20 grid-cols-1 md:grid-cols-3">
           {[
             {
               title: "New Judo Rules Announced",

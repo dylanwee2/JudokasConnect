@@ -59,7 +59,7 @@ export default function Profile() {
     };
 
     return (
-      <div className="bg-hsl(191, 29%, 78%) min-h-screen pt-10">
+      <div className="min-h-screen pt-10">
         <Head>
           <title>Profile Page</title>
         </Head>

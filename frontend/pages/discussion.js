@@ -163,94 +163,96 @@ export default function ForumPage() {
   }, [user, loading]);
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">💬 Discussion Forum</h1>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-          onClick={() => setAddDiscussionModalOpen(true)}
-        >
-          + New Post
-        </button>
-      </div>
-
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-        <input
-          type="text"
-          placeholder="Search topics..."
-          id="searchForum"
-          className="w-full sm:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-          onChange={searchForum}
-        />
-        <select className="w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
-          id="filterCategory"
-          onChange={filterThreads}>
-          <option value="All">All Categories</option>
-          <option value="General">General</option>
-          <option value="Announcements">Announcements</option>
-          <option value="Help">Help</option>
-          <option value="OffTopic">Off Topic</option>
-        </select>
-      </div>
-
-      <div className="space-y-5">
-        {threads.map((thread) => (
-          <div
-            key={thread.id}
-            className="bg-white p-5 rounded-xl shadow hover:shadow-md transition"
-            onClick={() => clickForum(thread)}
+    <div className="bg-[hsl(207,50%,90%)] ">
+      <div className="max-w-6xl mx-auto px-6 py-10">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">💬 Discussion Forum</h1>
+          <button
+            className="bg-[#B8D2D8] text-black px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            onClick={() => setAddDiscussionModalOpen(true)}
           >
-            {/* Title and Controls in one row */}
-            <div className="flex justify-between items-center mb-1">
-              <h2 className="text-xl font-semibold hover:text-blue-600 cursor-pointer">
-                {thread.title}
-              </h2>
+            + New Post
+          </button>
+        </div>
 
-              <div className="flex flex-col items-end ml-4">
-                {user?.displayName === thread.username && (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        clickEditForumButton(thread);
-                        setSelectedThread(thread);
-                      }}
-                      className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        deleteForum(thread);
-                      }}
-                      className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
-                <span className="text-sm text-gray-500 mt-1">
-                  💬 {thread.comments?.length || 0} Comments
-                </span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <input
+            type="text"
+            placeholder="Search topics..."
+            id="searchForum"
+            className="bg-gray-100 w-full sm:w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            onChange={searchForum}
+          />
+          <select className="bg-gray-100 w-full sm:w-1/4 px-3 py-2 border rounded-lg shadow-sm focus:outline-none"
+            id="filterCategory"
+            onChange={filterThreads}>
+            <option value="All">All Categories</option>
+            <option value="General">General</option>
+            <option value="Announcements">Announcements</option>
+            <option value="Help">Help</option>
+            <option value="OffTopic">Off Topic</option>
+          </select>
+        </div>
+
+        <div className="space-y-5 shadow-xl">
+          {threads.map((thread) => (
+            <div
+              key={thread.id}
+              className="bg-gray-100 p-5 rounded-xl shadow hover:shadow-md transition"
+              onClick={() => clickForum(thread)}
+            >
+              {/* Title and Controls in one row */}
+              <div className="flex justify-between items-center mb-1">
+                <h2 className="text-xl font-semibold hover:text-blue-600 cursor-pointer">
+                  {thread.title}
+                </h2>
+
+                <div className="flex flex-col items-end ml-4">
+                  {user?.displayName === thread.username && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          clickEditForumButton(thread);
+                          setSelectedThread(thread);
+                        }}
+                        className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 rounded hover:bg-blue-100 transition"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteForum(thread);
+                        }}
+                        className="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 rounded hover:bg-red-100 transition"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                  <span className="text-sm text-gray-500 mt-1">
+                    💬 {thread.comments?.length || 0} Comments
+                  </span>
+                </div>
+              </div>
+
+              {/* Content */}
+              <p className="text-gray-600 mb-2 line-clamp-2">{thread.content}</p>
+
+              {/* Tags + Author */}
+              <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center gap-2">
+                  <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
+                    {thread.category}
+                  </span>
+                  <span>👤 by {thread.username}</span>
+                </div>
               </div>
             </div>
 
-            {/* Content */}
-            <p className="text-gray-600 mb-2 line-clamp-2">{thread.content}</p>
-
-            {/* Tags + Author */}
-            <div className="flex items-center justify-between text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <span className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">
-                  {thread.category}
-                </span>
-                <span>👤 by {thread.username}</span>
-              </div>
-            </div>
-          </div>
-
-        ))}
+          ))}
+        </div>
       </div>
 
       <NewThreadModal

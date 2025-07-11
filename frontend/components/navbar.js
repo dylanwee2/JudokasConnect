@@ -47,9 +47,6 @@ export default function Navbar() {
             </a>
             {user && (
               <>
-                <span className="text-black font-medium">
-                  Welcome back, {user.displayName || user.email.split('@')[0]}!
-                </span>
                 <button
                   onClick={handleLogout}
                   className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
