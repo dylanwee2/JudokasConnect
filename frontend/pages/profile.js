@@ -32,8 +32,10 @@
             const userPhoto = await authFetch.get(`/api/images/${user.uid}`);
 
             if (userPhoto && userPhoto.video.url) {
-              setUserPhoto(userPhoto.video.url);
-              localStorage.setItem("userPhoto", userPhoto.video.url);
+              const imageWithTimestamp = `${userPhoto.video.url}?t=${Date.now()}`;
+              setUserPhoto(imageWithTimestamp);
+              localStorage.setItem("userPhoto", imageWithTimestamp);
+              window.dispatchEvent(new Event("profile-photo-updated"));
             }
 
           } catch (error) {
@@ -55,7 +57,6 @@
             const errorText = await response.text();
             throw new Error(`Upload failed: ${response.status} - ${errorText}`);
           }
-          console.log("profile updated");
           await getProfilePhoto(); 
         } catch (err) {
           console.error("[UPLOAD ERROR]", err);

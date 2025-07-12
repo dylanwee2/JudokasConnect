@@ -16,12 +16,23 @@ export default function Navbar() {
       console.log("User is not logged in");
     } else {
       console.log("User:", user);
+      
+      const updatePhoto = () => {
       const storedPhoto = localStorage.getItem("userPhoto");
       if (storedPhoto) {
-      setPhotoUrl(storedPhoto);
-    } else {
-      setPhotoUrl(null);
-    }
+        setPhotoUrl(`${storedPhoto}?t=${Date.now()}`); // bust cache
+      } else {
+        setPhotoUrl(null);
+      }
+    };
+
+    updatePhoto(); // run on mount
+
+    window.addEventListener("profile-photo-updated", updatePhoto);
+
+    return () => {
+      window.removeEventListener("profile-photo-updated", updatePhoto);
+    };
     }
   }, [user, loading]);
 
