@@ -185,8 +185,8 @@ export default function EventsPage() {
   }, [user, loading]);
 
   return (
-    <div className="bg-[hsl(207,50%,90%)] pt-5">
-    <div className="pb-20 px-20">
+    <div className="bg-[hsl(207,50%,90%)] min-h-screen p-4">
+    <div className="max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold mt-5 mb-6">Training Sessions</h1>
       <div className="bg-gray-100 rounded-lg shadow-lg p-4">
       <FullCalendar

@@ -27,7 +27,7 @@ export default function UploadModal({ onUpload }) {
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-xl hover:bg-blue-600"
+          className="bg-[#B8D2D8] px-4 py-2 rounded-md hover:bg-[#97BBC3]"
         >
           Attach Video
         </button>

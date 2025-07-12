@@ -113,11 +113,11 @@ export default function Home() {
       <main className="p-4 max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-10 pb-4">
           <div className="text-left">
-            <h2 className="text-[hsl(191,30%,60%)] text-3xl font-extrabold"> Upload and discover insights from fellow Judokas</h2>
+            <h2 className="text-3xl font-bold pt-8"> Upload and discover insights from fellow Judokas</h2>
           </div>
           <button
             onClick={() => setShowModal(true)}
-            className="bg-[#B8D2D8] text-black px-6 py-2 rounded-lg shadow hover:shadow-md hover:scale-105 transition"
+            className="bg-[#B8D2D8] text-black mt-8 px-6 py-2 rounded-lg shadow hover:shadow-md hover:scale-105 transition"
           >
             + Upload Video
           </button>

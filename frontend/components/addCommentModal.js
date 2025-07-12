@@ -84,7 +84,7 @@ export default function AddCommentModal({
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+            className="bg-[#B8D2D8] px-4 py-2 rounded-md hover:bg-[#97BBC3]"
           >
             {editingComment ? "Update" : "Post"}
           </button>

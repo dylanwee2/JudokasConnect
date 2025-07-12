@@ -145,7 +145,7 @@ export default function EventAttendanceModal({ isOpen, onClose, onSubmit, event 
           </button>
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className="bg-[#B8D2D8] px-4 py-2 rounded-md hover:bg-[#97BBC3]"
           >
             Save
           </button>

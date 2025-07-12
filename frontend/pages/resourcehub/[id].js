@@ -58,7 +58,7 @@
         <h1 className="text-3xl font-bold">{exercise.name}</h1>
         <button
           onClick={() => router.back()}
-          className="text-blue-600 hover:underline text-sm"
+          className="hover:underline text-sm"
         >
           ← Back
         </button>

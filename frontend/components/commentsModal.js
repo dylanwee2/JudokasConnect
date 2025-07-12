@@ -144,7 +144,7 @@ export default function CommentModal({
         <div className="flex justify-end">
           <button
             onClick={() => setAddCommentModalOpen(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+            className="bg-[#B8D2D8] px-4 py-2 rounded-md hover:bg-[#97BBC3] transition"
           >
             Add Comment
           </button>

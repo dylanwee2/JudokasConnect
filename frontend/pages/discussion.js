@@ -166,9 +166,9 @@ export default function ForumPage() {
     <div className="bg-[hsl(207,50%,90%)] ">
       <div className="max-w-6xl mx-auto px-6 py-10">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">💬 Discussion Forum</h1>
+          <h1 className="text-3xl font-bold">Discussion Forum</h1>
           <button
-            className="bg-[#B8D2D8] text-black px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            className="bg-[#B8D2D8] text-black px-4 py-2 rounded-lg hover:bg-[#97BBC3] transition"
             onClick={() => setAddDiscussionModalOpen(true)}
           >
             + New Post

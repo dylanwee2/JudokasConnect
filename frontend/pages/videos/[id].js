@@ -76,7 +76,7 @@ export default function VideoPage() {
           )}
           <button
             onClick={() => router.push('/video')}
-            className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+            className="bg-[#B8D2D8] px-4 py-1 rounded hover:bg-[#97BBC3]"
           >
             Back
           </button>

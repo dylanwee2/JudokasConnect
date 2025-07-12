@@ -157,9 +157,6 @@ export default function DietPlan() {
       <div className="bg-[hsl(207,50%,90%)] min-h-screen p-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8 pt-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 text-white rounded-full mb-4">
-              <span className="text-2xl font-bold">👤</span>
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Let's Personalize Your Diet Plan</h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
               To create the perfect nutrition plan for you, we need some basic information about your goals and current stats.
@@ -317,7 +314,7 @@ export default function DietPlan() {
                 type="button"
                 onClick={handleSubmitPersonalData}
                 disabled={isLoading}
-                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-[#B8D2D8] py-4 px-6 rounded-lg font-semibold hover:bg-[#97BBC3] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isLoading ? (
                   <>
@@ -353,7 +350,7 @@ export default function DietPlan() {
           <div className="space-x-4 justify-end ml-auto">
             <button
               onClick={() => setHasPersonalData(false)}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="px-6 py-3 bg-[#B8D2D8] rounded-lg hover:bg-[#97BBC3] transition-colors disabled:opacity-50"
             >
               Generate New Plan
             </button>
@@ -475,7 +472,7 @@ export default function DietPlan() {
             <p className="text-gray-600 mb-4">No diet plan generated yet.</p>
             <button
               onClick={generateDietPlan}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="px-6 py-3 bg-[#B8D2D8] rounded-lg hover:bg-[#97BBC3] transition-colors"
             >
               Generate Diet Plan
             </button>
