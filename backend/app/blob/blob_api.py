@@ -6,6 +6,7 @@ from typing import Optional
 
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
 from azure.storage.blob import BlobServiceClient
+from azure.core.exceptions import ResourceNotFoundError
 
 from app.auth.auth import Auth
 from app.blob import VideoFormData
@@ -123,13 +124,8 @@ async def list_images():
 @image_router.get("/{video_id}")
 async def get_image(video_id: str):
     try:
-        # Try to get the blob by name (filename is used as ID)
         blob_client = container_client.get_blob_client(video_id)
-        
-        if not blob_client.exists():
-            raise HTTPException(status_code=404, detail="Video not found")
-
-        props = blob_client.get_blob_properties()
+        props = blob_client.get_blob_properties()  # <- this will throw if blob not found
         metadata = props.metadata or {}
 
         video = {
@@ -142,7 +138,10 @@ async def get_image(video_id: str):
         }
 
         return {"video": video}
-    
+
+    except ResourceNotFoundError:
+        raise HTTPException(status_code=404, detail="Video not found")
+
     except Exception as e:
         print("[FETCH VIDEO ERROR]", e)
         raise HTTPException(status_code=500, detail=f"Failed to fetch video: {str(e)}")

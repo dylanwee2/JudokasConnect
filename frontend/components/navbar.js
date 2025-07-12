@@ -58,7 +58,6 @@ export default function Navbar() {
                 ) : (
                   <img src="/profile.svg" alt="Default Profile" className="h-8 w-8 rounded-full" />
                 )}
-              <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
             </a>
             {user && (
               <>

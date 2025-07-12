@@ -55,7 +55,7 @@
             const errorText = await response.text();
             throw new Error(`Upload failed: ${response.status} - ${errorText}`);
           }
-
+          console.log("profile updated");
           await getProfilePhoto(); 
         } catch (err) {
           console.error("[UPLOAD ERROR]", err);
