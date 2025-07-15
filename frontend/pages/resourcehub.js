@@ -20,7 +20,7 @@ export default function Resourcehub() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center gap-6 p-4 md:p-6 bg-[#FDF6F0] min-h-screen">
+    <div className="flex flex-col items-center gap-6 p-4 md:p-6 bg-[hsl(207,50%,90%)] min-h-screen">
       {exercises.map((exercise, index) => (
         <Link 
           key={index}

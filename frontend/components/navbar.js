@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { auth } from "../pages/firebase";
 import { signOut } from "firebase/auth";
-import { useAuthState } from 'react-firebase-hooks/auth';
+import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -16,29 +17,29 @@ export default function Navbar() {
       console.log("User is not logged in");
     } else {
       console.log("User:", user);
-      
+
       const updatePhoto = () => {
-      const storedPhoto = localStorage.getItem("userPhoto");
-      if (storedPhoto) {
-        setPhotoUrl(`${storedPhoto}?t=${Date.now()}`); // bust cache
-      } else {
-        setPhotoUrl(null);
-      }
-    };
+        const storedPhoto = localStorage.getItem("userPhoto");
+        if (storedPhoto) {
+          setPhotoUrl(`${storedPhoto}?t=${Date.now()}`); // bust cache
+        } else {
+          setPhotoUrl(null);
+        }
+      };
 
-    updatePhoto(); // run on mount
+      updatePhoto(); // run on mount
 
-    window.addEventListener("profile-photo-updated", updatePhoto);
+      window.addEventListener("profile-photo-updated", updatePhoto);
 
-    return () => {
-      window.removeEventListener("profile-photo-updated", updatePhoto);
-    };
+      return () => {
+        window.removeEventListener("profile-photo-updated", updatePhoto);
+      };
     }
   }, [user, loading]);
 
   const handleLogout = async () => {
     await signOut(auth);
-    router.push('/login');
+    router.push("/login");
   };
 
   return (
@@ -47,31 +48,57 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo and brand */}
           <div className="flex items-center space-x-4">
-            <img src="/judokaslogo.jpg" className="h-8 w-8 rounded-full" alt="Logo" />
-            <a href="/" className="text-xl font-bold text-black">JudokasConnect</a>
+            <img
+              src="/judokaslogo.jpg"
+              className="h-8 w-8 rounded-full"
+              alt="Logo"
+            />
+            <a href="/" className="text-xl font-bold text-black">
+              JudokasConnect
+            </a>
           </div>
 
           {/* Full Nav - visible only on xl and above */}
           <div className="hidden xl:flex items-center space-x-6 text-black font-medium">
-            <a href="/" className="hover:text-orange-600">Home</a>
-            <a href="/events" className="hover:text-orange-600">Training Sessions</a>
-            <a href="/discussion" className="hover:text-orange-600">Discussion</a>
-            <a href="/video" className="hover:text-orange-600">Video Sharing</a>
-            <a href="/resourcehub" className="hover:text-orange-600">Exercises</a>
-            <a href="/dietplan" className="hover:text-orange-600">AI Diet Plan</a>
+            <a href="/" className="hover:text-orange-600">
+              Home
+            </a>
+            <a href="/events" className="hover:text-orange-600">
+              Training Sessions
+            </a>
+            <a href="/discussion" className="hover:text-orange-600">
+              Discussion
+            </a>
+            <a href="/video" className="hover:text-orange-600">
+              Video Sharing
+            </a>
+            <a href="/resourcehub" className="hover:text-orange-600">
+              Exercises
+            </a>
+            <a href="/dietplan" className="hover:text-orange-600">
+              AI Diet Plan
+            </a>
           </div>
 
-          {/* Profile & Logout (always visible on xl) */}
+          {/* Profile, Login & Logout (visible on xl and above) */}
           <div className="hidden xl:flex items-center space-x-4">
-            <a href="/profile">
-                {photoUrl ? (
-                  <img src={photoUrl} alt="Profile" className="h-8 w-8 rounded-full" />
-                ) : (
-                  <img src="/profile.svg" alt="Default Profile" className="h-8 w-8 rounded-full" />
-                )}
-            </a>
-            {user && (
+            {user ? (
               <>
+                <a href="/profile">
+                  {photoUrl ? (
+                    <img
+                      src={photoUrl}
+                      alt="Profile"
+                      className="h-8 w-8 rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src="/profile.svg"
+                      alt="Default Profile"
+                      className="h-8 w-8 rounded-full"
+                    />
+                  )}
+                </a>
                 <button
                   onClick={handleLogout}
                   className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
@@ -79,17 +106,47 @@ export default function Navbar() {
                   Logout
                 </button>
               </>
+            ) : (
+              <>
+                <a href="/profile">
+                  <img
+                    src="/profile.svg"
+                    alt="Default Profile"
+                    className="h-8 w-8 rounded-full"
+                  />
+                </a>
+                <Link href="/login">
+                  <button className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600">
+                    Login
+                  </button>
+                </Link>
+              </>
             )}
           </div>
 
           {/* Hamburger Icon - visible only on xl and below */}
           <div className="xl:hidden">
             <button onClick={() => setMenuOpen(!menuOpen)}>
-              <svg className="w-6 h-6 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                className="w-6 h-6 text-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 {menuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M4 6h16M4 12h16M4 18h16"
+                  />
                 )}
               </svg>
             </button>
@@ -100,28 +157,60 @@ export default function Navbar() {
         {menuOpen && (
           <div className="xl:hidden mt-2 space-y-2 text-black font-medium">
             <div className="flex flex-col space-y-2">
-              <a href="/" className="hover:text-orange-600">Home</a>
-              <a href="/events" className="hover:text-orange-600">Training Sessions</a>
-              <a href="/discussion" className="hover:text-orange-600">Discussion</a>
-              <a href="/video" className="hover:text-orange-600">Video Sharing</a>
-              <a href="/resourcehub" className="hover:text-orange-600">Exercises</a>
-              <a href="/dietplan" className="hover:text-orange-600">AI Diet Plan</a>
+              <a href="/" className="hover:text-orange-600">
+                Home
+              </a>
+              <a href="/events" className="hover:text-orange-600">
+                Training Sessions
+              </a>
+              <a href="/discussion" className="hover:text-orange-600">
+                Discussion
+              </a>
+              <a href="/video" className="hover:text-orange-600">
+                Video Sharing
+              </a>
+              <a href="/resourcehub" className="hover:text-orange-600">
+                Exercises
+              </a>
+              <a href="/dietplan" className="hover:text-orange-600">
+                AI Diet Plan
+              </a>
             </div>
             <div className="flex flex-col items-center space-y-2">
-              <a href="/profile">
-                <img src="/profile.svg" className="h-8 w-8 rounded-full" alt="Profile" />
-              </a>
-              {user && (
+              {user ? (
                 <>
-
+                  <a href="/profile">
+                    <img
+                      src={photoUrl || "/profile.svg"}
+                      className="h-8 w-8 rounded-full"
+                      alt="Profile"
+                    />
+                  </a>
                   <div className="py-3">
-                  <button
-                    onClick={handleLogout}
-                    className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
-                  >
-                    Logout
-                  </button>
-                </div>
+                    <button
+                      onClick={handleLogout}
+                      className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <a href="/profile">
+                    <img
+                      src="/profile.svg"
+                      className="h-8 w-8 rounded-full"
+                      alt="Profile"
+                    />
+                  </a>
+                  <div className="py-3">
+                    <Link href="/login">
+                      <button className="bg-[#B8D2D8] text-black px-3 py-1 rounded hover:bg-orange-600">
+                        Login
+                      </button>
+                    </Link>
+                  </div>
                 </>
               )}
             </div>

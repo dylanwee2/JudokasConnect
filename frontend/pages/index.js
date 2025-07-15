@@ -7,7 +7,7 @@ export default function Home({ news }) {
         <title>Judo News</title>
       </Head>
 
-      <main className="flex flex-col items-center gap-6 p-4 md:p-6 bg-[#FDF6F0] min-h-screen">
+      <main className="flex flex-col items-center gap-6 p-4 md:p-6 bg-[hsl(207,50%,90%)] min-h-screen">
         <h1 className="text-3xl sm:text-4xl font-semibold mb-4 text-center sm:text-left w-full max-w-6xl">
           Latest Judo News
         </h1>
