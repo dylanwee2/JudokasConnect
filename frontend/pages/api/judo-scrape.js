@@ -12,7 +12,7 @@ export async function scrapeAndCacheIJFNews() {
     const url = href?.startsWith("http") ? href : `https://www.ijf.org${href}`;
 
 
-    const title = link.find(".texts .title").text().trim();e
+    const title = link.find(".texts .title").text().trim();
     const style = link.attr("style") || "";
     const imgMatch = style.match(/background-image:\s*url\((.*?)\)/i);
     const urlToImage = imgMatch ? imgMatch[1].replace(/['"]/g, "") : null;
