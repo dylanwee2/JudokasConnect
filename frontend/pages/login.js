@@ -35,7 +35,7 @@ function Login() {
       {/* Background image layer */}
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/login_bg.avif')" }}
+        style={{ backgroundImage: "url('/login_bg_resized.png')" }}
       >
         {/* Optional overlay */}
         <div className="absolute inset-0 bg-black opacity-30"></div>
