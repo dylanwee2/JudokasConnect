@@ -10,6 +10,16 @@ Developed as part of the SMU .Hack HEAP Programme (Top 5 Placement).
 Judo is a niche and often under-resourced sport. Many teams rely on manual or fragmented systems for attendance, training feedback, and communication.
 JudokasConnect aims to centralize these functions into one cohesive platform — combining technology, community, and sports science.
 
+## To Start Project
+```shell
+docker compose up --watch
+```
+
+## To Build Project
+```shell
+docker compose build
+```
+
 ## Key Features
 ### Training Management
 
